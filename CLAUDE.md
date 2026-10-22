@@ -1,55 +1,68 @@
 # CLAUDE.md
 
-A static, multilingual Astro site for tourists visiting Lake Maracaibo to see the Catatumbo Lightning. Languages: es (default), en, de, fr. The look comes from the Catatumbo Field Guide design system (copied from the earlier `ClaudeCatatumboAstro` project).
+Sitio Astro estático y multilingüe para turistas que visitan el Lago de Maracaibo para ver el Relámpago del Catatumbo. Idiomas: es (por defecto), en, de, fr. El diseño viene del sistema de diseño Catatumbo Field Guide (copiado del proyecto anterior `ClaudeCatatumboAstro`).
 
-## Project scope (current phase)
+En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 
-- Static Astro site, `output: 'static'`. No SSR, no adapters.
-- Languages: es, en, de, fr, with Astro's built-in i18n routing. Every language has a prefix (`/es/`, `/en/`, …).
-- Content lives in Markdown under `src/content/pages/<lang>/`.
-- No database, CMS, auth, bookings, weather, GPS, maps, service worker or app/offline features. Those are future phases; don't prepare for them.
-- No UI frameworks (React/Vue/etc.) and no new dependencies without asking first. Today the only dependency is `astro`.
-- Keep the site fully static with no essential third-party embeds (maps, videos, widgets), so it can later become a PWA or Capacitor app.
-- Prefer fewer files. Explain any change in plain language before making it. Work in small steps.
+## Alcance del proyecto (fase actual: app)
 
-## Commands
+- Un mismo código y un mismo contenido sirven para la web y para la app. La web sigue siendo un sitio Astro estático (`output: 'static'`, sin SSR ni adaptadores) y se sigue publicando en GitHub Pages. Ningún cambio hecho para la app puede romper la web.
+- La app empaqueta el build estático (`dist/`). La herramienta nativa la elige quien desarrolla la app. Se recomienda Capacitor, porque usa `dist/` tal cual como `webDir`. Cuando se elija, anótala aquí.
+- Idiomas: es, en, de, fr, con el enrutado i18n que trae Astro. Cada idioma tiene su prefijo (`/es/`, `/en/`, …).
+- El contenido está en Markdown, en `src/content/pages/<lang>/`.
+- **Entra en esta fase:** empaquetar la app para Android e iOS; que la app funcione sin internet, con todo el contenido, las fuentes y las imágenes dentro de la app (la web no necesita service worker); iconos, pantalla de inicio (splash) y preparación para las tiendas.
+- **No entra (fases futuras, no las prepares):** base de datos, CMS, cuentas/login, reservas, clima, GPS, mapas, notificaciones.
+- Dependencias: se pueden añadir las que hagan falta, incluidos frameworks de UI. Explica en el cambio por qué se añade cada una.
+- Nada de embeds de terceros esenciales (mapas, vídeos, widgets): la app tiene que funcionar sin internet.
+- Prefiere pocos archivos. Explica cada cambio en lenguaje sencillo antes de hacerlo. Trabaja en pasos pequeños.
+
+## Comandos
 
 ```sh
 npm run dev       # http://localhost:4321
-npm run build     # static site in dist/
-npm run preview   # serve dist/
-npm run check     # type-check .astro and .ts
+npm run build     # sitio estático en dist/
+npm run preview   # sirve dist/
+npm run check     # revisa los tipos de .astro y .ts
 ```
 
-There are no tests. `npm run check` plus a build are the verification steps. Look at the result in a browser.
-- Keep `typescript` at `^6`, because `@astrojs/check` 0.9.x does not support TS 7.
-- When run from an agent, `astro dev` / `astro preview` detach. Stop them with `npx astro dev stop` / `npx astro preview stop`.
+No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en un navegador.
+- Mantén `typescript` en `^6`, porque `@astrojs/check` 0.9.x no es compatible con TS 7.
+- Cuando los lanza un agente, `astro dev` / `astro preview` quedan en segundo plano. Se detienen con `npx astro dev stop` / `npx astro preview stop`.
 
-## How it fits together
+## La app (notas técnicas)
 
-- `src/content.config.ts` defines the `pages` collection. Each Markdown file has `key` (the same in every language; it links translations), `title`, `description`, `order` (menu position), and optionally `photo`/`photoAlt` and `draft_translation`. The file name is the URL: `es/relampago.md` → `/es/relampago/`.
-- `src/pages/[lang]/[...slug].astro` renders every Markdown page. `src/pages/[lang]/index.astro` is the home page. `src/pages/index.astro` (the site root) redirects to the visitor's language and shows a language picker without JavaScript.
-- `src/i18n/ui.ts` holds the interface text (menu, buttons, home page) and the list of languages (`LANGS`). Each language is typed against `es`, so a missing key is a type error. Keep every language in sync.
-- `src/lib/pages.ts` holds the helpers for finding pages and building URLs.
-- `src/layouts/Base.astro` holds the `<head>`, top bar and footer. `src/components/` holds the parts.
+- Para la app, compila con `npm run build` **sin** `PUBLIC_DEPLOY_TARGET`. Así la base es `/`. La variable `pages` es solo para la vista previa en GitHub Pages.
+- Las URLs tienen forma de carpeta (`trailingSlash: 'always'`): `/es/relampago/` es `es/relampago/index.html`. Comprueba pronto que la navegación funciona en el WebView de Android y de iOS.
+- La raíz (`src/pages/index.astro`) redirige con JavaScript al idioma guardado en `localStorage` (`ct.lang`) o, si no hay, al del teléfono.
+- Los enlaces externos (créditos de las fotos) usan `target="_blank"`. Hay que decidir si se abren en el navegador del sistema.
+- Las fotos son CC BY-SA 2.0: su crédito tiene que seguir visible en la app.
+- Cuando se añadan las carpetas nativas y la configuración (p. ej. `android/`, `ios/`, `capacitor.config.*`), descríbelas aquí junto con los comandos para compilar la app.
 
-## Links and the base path
+## Cómo encaja todo
 
-The same code builds for the GitHub Pages preview (served under `/<repo>/`) and for the root (`/`, the final host or an app). So:
-- Link to pages with `pageUrl()`, `urlOf()` and `homeUrl()` from `src/lib/pages.ts`. These use `getRelativeLocaleUrl`. Never hand-write `/es/…`.
-- Link to files in `public/` with `asset('img/…')`.
-- `PUBLIC_DEPLOY_TARGET=pages` (set by `.github/workflows/deploy.yml`) switches `site`/`base` in `astro.config.mjs` and adds `noindex`.
+- `src/content.config.ts` define la colección `pages`. Cada archivo Markdown tiene `key` (igual en todos los idiomas; vincula las traducciones), `title`, `description`, `order` (posición en el menú) y, opcionalmente, `photo`/`photoAlt` y `draft_translation`. El nombre del archivo es la URL: `es/relampago.md` → `/es/relampago/`.
+- `src/pages/[lang]/[...slug].astro` renderiza todas las páginas Markdown. `src/pages/[lang]/index.astro` es la página de inicio. `src/pages/index.astro` (la raíz del sitio) redirige al idioma del visitante y, sin JavaScript, muestra un selector de idioma.
+- `src/i18n/ui.ts` contiene los textos de la interfaz (menú, botones, página de inicio) y la lista de idiomas (`LANGS`). Cada idioma se tipa contra `es`, así que una clave que falte es un error de tipos. Mantén todos los idiomas sincronizados.
+- `src/lib/pages.ts` contiene las funciones para encontrar páginas y construir URLs.
+- `src/layouts/Base.astro` contiene el `<head>`, la barra superior y el pie. `src/components/` contiene las piezas.
 
-## Adding things
+## Enlaces y ruta base
 
-- **A page:** add one Markdown file per language with the same `key`, and add the key to the `z.enum` in `content.config.ts`. Then give it a card colour and icon in `src/pages/[lang]/index.astro` (`CARD`).
-- **A language:** add it to `LANGS`/`LANG_NAMES` in `ui.ts` and to `locales` in `astro.config.mjs`, add its `ui.ts` block, and add a folder of Markdown pages.
-- de and fr are draft translations (`draft_translation: true`) until a native speaker reviews them.
+El mismo código se compila para la vista previa en GitHub Pages (servida bajo `/<repo>/`) y para la raíz (`/`, el hosting final o la app). Por eso:
+- Enlaza las páginas con `pageUrl()`, `urlOf()` y `homeUrl()` de `src/lib/pages.ts`. Usan `getRelativeLocaleUrl`. Nunca escribas `/es/…` a mano.
+- Enlaza los archivos de `public/` con `asset('img/…')`.
+- `PUBLIC_DEPLOY_TARGET=pages` (lo pone `.github/workflows/deploy.yml`) cambia `site`/`base` en `astro.config.mjs` y añade `noindex`.
 
-## Styling
+## Añadir cosas
 
-Styles load in this order: `tokens.css`, then `bundle.css`, then `site.css`.
-- `tokens.css` holds the design tokens and type classes (`display-*`, `copy-*`, `mono-*`). Don't hand-edit it.
-- `bundle.css` holds the design system's `ct-*` component styles. Keep it unchanged.
-- `site.css` is the page layer. All site-specific CSS goes here, including the `.prose` styles for Markdown.
-- Square corners everywhere are part of the design. Dark bands use `data-theme="night"`.
+- **Una página:** añade un archivo Markdown por idioma con la misma `key`, y añade la clave al `z.enum` de `content.config.ts`. Después dale un color de tarjeta y un icono en `src/pages/[lang]/index.astro` (`CARD`).
+- **Un idioma:** añádelo a `LANGS`/`LANG_NAMES` en `ui.ts` y a `locales` en `astro.config.mjs`, añade su bloque en `ui.ts` y una carpeta con sus páginas Markdown.
+- de y fr son traducciones en borrador (`draft_translation: true`) hasta que las revise un hablante nativo.
+
+## Estilos
+
+Los estilos se cargan en este orden: `tokens.css`, después `bundle.css`, después `site.css`.
+- `tokens.css` contiene los tokens de diseño y las clases tipográficas (`display-*`, `copy-*`, `mono-*`). No lo edites a mano.
+- `bundle.css` contiene los estilos de los componentes `ct-*` del sistema de diseño. No lo cambies.
+- `site.css` es la capa de la página. Todo el CSS propio del sitio va aquí, incluidos los estilos `.prose` del Markdown.
+- Las esquinas rectas en todas partes son parte del diseño. Las franjas oscuras usan `data-theme="night"`.

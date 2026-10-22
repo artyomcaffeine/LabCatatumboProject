@@ -1,5 +1,5 @@
-# Builds the site and publishes the client preview on GitHub Pages on every push to main.
-# One-time setup on GitHub: Settings → Pages → Source: GitHub Actions.
+# Compila el sitio y publica la vista previa para el cliente en GitHub Pages con cada push a main.
+# Configuración única en GitHub: Settings → Pages → Source: GitHub Actions.
 name: Deploy preview to GitHub Pages
 
 on:

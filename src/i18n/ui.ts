@@ -1,13 +1,13 @@
-/* Interface text (menus, buttons, home page) in every language.
-   Page content lives in Markdown under src/content/pages/<lang>/.
-   Each language is typed against `es`, so a missing key is a type error.
-   de and fr are draft translations: have a native speaker review them. */
+/* Textos de la interfaz (menús, botones, página de inicio) en todos los idiomas.
+   El contenido de las páginas está en Markdown, en src/content/pages/<lang>/.
+   Cada idioma se tipa contra `es`, así que una clave que falte es un error de tipos.
+   de y fr son traducciones en borrador: que las revise un hablante nativo. */
 
 export const LANGS = ['es', 'en', 'de', 'fr'] as const;
 export type Lang = (typeof LANGS)[number];
 export const DEFAULT_LANG: Lang = 'es';
 
-/* Each language names itself, so visitors recognise their own. */
+/* Cada idioma se nombra a sí mismo, para que cada visitante reconozca el suyo. */
 export const LANG_NAMES: Record<Lang, string> = { es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français' };
 
 const es = {
