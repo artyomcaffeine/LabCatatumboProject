@@ -15,6 +15,7 @@ En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 - Dependencias: se pueden añadir las que hagan falta, incluidos frameworks de UI. Explica en el cambio por qué se añade cada una.
 - Nada de embeds de terceros esenciales (mapas, vídeos, widgets): la app tiene que funcionar sin internet.
 - Prefiere pocos archivos. Explica cada cambio en lenguaje sencillo antes de hacerlo. Trabaja en pasos pequeños.
+- `PLAN.md` es el plan de trabajo vivo: pasos pendientes, decisiones abiertas y registro de decisiones. Actualízalo al terminar cada paso.
 
 ## Comandos
 
