@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import TourList from '../../components/TourList.astro';
 import { langOf, slugOf, type Page } from '../../lib/pages';
 
 export async function getStaticPaths() {
@@ -26,5 +27,6 @@ const { Content } = await render(page);
   )}
   <article class="ct-section prose">
     <Content />
+    {key === 'tours' && <TourList lang={lang} />}
   </article>
 </Base>
