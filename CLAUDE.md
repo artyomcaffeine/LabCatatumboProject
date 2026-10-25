@@ -53,6 +53,7 @@ No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en u
 ## Cómo encaja todo
 
 - `src/content.config.ts` define la colección `pages`. Cada archivo Markdown tiene `key` (igual en todos los idiomas; vincula las traducciones), `title`, `description`, `order` (posición en el menú) y, opcionalmente, `photo`/`photoAlt` y `draft_translation`. El nombre del archivo es la URL: `es/relampago.md` → `/es/relampago/`.
+- La colección `tours` (`src/content/tours.yaml`, una lista para los 4 idiomas) guarda los operadores de tours. `src/components/TourList.astro` la muestra al final de la página con `key: tours`. Mientras la lista está vacía, el build avisa de que la colección está vacía: es normal.
 - `src/pages/[lang]/[...slug].astro` renderiza todas las páginas Markdown. `src/pages/[lang]/index.astro` es la página de inicio. `src/pages/index.astro` (la raíz del sitio) redirige al idioma del visitante y, sin JavaScript, muestra un selector de idioma.
 - `src/i18n/ui.ts` contiene los textos de la interfaz (menú, botones, página de inicio) y la lista de idiomas (`LANGS`). Cada idioma se tipa contra `es`, así que una clave que falte es un error de tipos. Mantén todos los idiomas sincronizados.
 - `src/lib/pages.ts` contiene las funciones para encontrar páginas y construir URLs.
@@ -68,6 +69,7 @@ El mismo código se compila para la vista previa en GitHub Pages (servida bajo `
 ## Añadir cosas
 
 - **Una página:** añade un archivo Markdown por idioma con la misma `key`, y añade la clave al `z.enum` de `content.config.ts`. Después dale un color de tarjeta y un icono en `src/pages/[lang]/index.astro` (`CARD`).
+- **Un operador de tours:** añade una entrada a `src/content/tours.yaml` (hay una plantilla en el archivo), con la fecha de revisión. Antes, comprueba los criterios de `PLAN.md` (Fase 2).
 - **Un idioma:** añádelo a `LANGS`/`LANG_NAMES` en `ui.ts` y a `locales` en `astro.config.mjs`, añade su bloque en `ui.ts` y una carpeta con sus páginas Markdown.
 - de y fr son traducciones en borrador (`draft_translation: true`) hasta que las revise un hablante nativo.
 

@@ -46,11 +46,15 @@ Objetivo: el mismo build estático (`dist/`) empaquetado como app de Android e i
 
 Encaja en la fase actual: son enlaces, no embeds de terceros.
 
-- [ ] Nueva página por idioma con `key: tours` (por ejemplo `es/tours.md`, `en/tours.md`…). Añadir `'tours'` al `z.enum` de `src/content.config.ts` y su tarjeta (color e icono, p. ej. `boat`) en `CARD` de `src/pages/[lang]/index.astro`.
-- [ ] Formato: empezar con una lista en Markdown (pocos archivos). Si la lista crece o se repite en varios sitios, pasarla a una colección de datos (`src/content/tours.yaml`: nombre, URL, idiomas, punto de salida, contacto) y renderizarla con un componente.
-- [ ] Texto de aviso en cada idioma: no hay relación comercial (o sí, si se decide lo contrario), no se avala a los operadores, fecha de la última revisión de la lista.
-- [ ] Criterios para incluir a un operador (local, con permisos del parque nacional, buenas prácticas con las comunidades). Anotarlos aquí.
-- [ ] En la app los enlaces se abren en el navegador del sistema (Fase 1, paso 5). Sin conexión la lista se ve, pero los sitios de los operadores no.
+- [x] Página "Tours y guías" en los 4 idiomas (`es/tours.md`, `en/tours.md`, `de/touren.md`, `fr/excursions.md`), en el menú después de "Visitar". Explica cómo es la excursión, qué preguntar antes de reservar y por qué elegir servicios locales. Tarjeta en la portada (verde, icono de barco); con 5 tarjetas, la última ocupa toda la fila. de y fr, en borrador.
+- [x] Lista de operadores como colección de datos (`src/content/tours.yaml`): un solo archivo para los 4 idiomas, así cada URL se escribe una vez. Campos: `name`, `url`, `base` (de dónde sale), `langs` (idiomas del guía), `reviewed` (fecha de revisión) y `note` opcional por idioma. La muestra `TourList.astro`; si está vacía, dice que la lista está en revisión.
+- [x] Aviso en cada idioma bajo la lista: es orientativa, no avalamos a ningún operador, confirmar precios y condiciones con el operador. Cada operador muestra su fecha de revisión.
+- [x] En la app los enlaces se abren en el navegador del sistema. Sin conexión la lista se ve, pero los sitios de los operadores no.
+- [ ] **Lista inicial de operadores** (decisión pendiente). Candidatos encontrados en artículos antiguos, **sin verificar**: no los he publicado porque sus webs no respondían (error 503, octubre de 2026) y las fuentes son de 2015–2018.
+  - Alan Highton / Catatumbo Tour (`cocolight.com`, `catatumbotour.com`): tours de 2–3 días desde Mérida (Rough Guides 2018, The Guardian 2015).
+  - Saiga Tours (`saigatours.com`): agencia internacional con un viaje a Venezuela que incluye una noche viendo el relámpago (fin de año 2026–27).
+  - Agencias de Mérida y posadas de los palafitos (Ologá, Congo Mirador): buscar contacto directo.
+- [ ] Criterios para incluir a un operador. Propuesta: web o contacto que responde; sale de la zona (Mérida, Santa Bárbara, Puerto Concha) o trabaja con guías locales; chalecos salvavidas; respeta las normas del parque nacional y a las comunidades; revisión cada 6 meses (fecha `reviewed`).
 - [ ] Revisar la lista periódicamente (enlaces rotos, operadores que cierran).
 
 ---
@@ -100,7 +104,7 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 - [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
-- [ ] Lista inicial de operadores de tours y criterios para incluirlos.
+- [ ] Lista inicial de operadores de tours y criterios para incluirlos (candidatos y propuesta de criterios en la Fase 2).
 - [ ] ¿Enlaces de afiliado o patrocinados? (afecta al aviso, a la privacidad y a las tiendas).
 - [ ] Qué significa "cantidad de rayos" en la app: probabilidad, promedio histórico o conteo real.
 - [ ] Coordenadas de referencia para el tiempo y la distancia.
@@ -114,3 +118,5 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-25 | En la app, los enlaces internos terminan en `index.html` (build con `--mode app`). | Capacitor sirve el `index.html` de la raíz para rutas sin extensión. Es el arreglo más pequeño y no toca la web. |
 | 2026-10-25 | Los enlaces externos se abren en el navegador del sistema, sin `@capacitor/browser`. | Capacitor ya lo hace solo en Android e iOS: una dependencia menos. |
 | 2026-10-25 | Icono sin el texto "CATATUMBO". | No se lee a tamaño de icono y el teléfono ya muestra el nombre debajo. |
+| 2026-10-25 | Operadores en una colección de datos (`tours.yaml`), no en Markdown. | Una sola lista para los 4 idiomas: cada URL y cada fecha se escriben una vez. |
+| 2026-10-25 | No publicar operadores sin verificar. | Sus webs no respondían y las fuentes eran antiguas; un enlace roto o un operador cerrado daña la confianza en la guía. |
