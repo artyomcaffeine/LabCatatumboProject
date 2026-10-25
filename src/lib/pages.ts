@@ -11,8 +11,13 @@ export type PageKey = Page['data']['key'];
 export const langOf = (page: Page) => page.id.split('/')[0] as Lang;
 export const slugOf = (page: Page) => page.id.split('/').slice(1).join('/');
 
-export const homeUrl = (lang: Lang) => getRelativeLocaleUrl(lang);
-export const pageUrl = (page: Page) => getRelativeLocaleUrl(langOf(page), slugOf(page));
+/* En la app (`astro build --mode app`), Capacitor responde a toda ruta sin extensión (/es/relampago/) con el
+   index.html de la raíz, como si fuera una SPA. Por eso allí los enlaces apuntan al archivo: /es/relampago/index.html. */
+const app = import.meta.env.MODE === 'app';
+const toFile = (url: string) => (app ? url.replace(/\/?$/, '/index.html') : url);
+
+export const homeUrl = (lang: Lang) => toFile(getRelativeLocaleUrl(lang));
+export const pageUrl = (page: Page) => toFile(getRelativeLocaleUrl(langOf(page), slugOf(page)));
 
 /* Las páginas de un idioma, en el orden del menú. */
 export async function pagesIn(lang: Lang) {
