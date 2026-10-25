@@ -50,6 +50,8 @@ img { max-width: 100%; }
 /* Inicio: tarjetas de las páginas */
 .ct-place .card-icon { color: var(--place-type); }
 .ct-place h3 { margin-top: 30px; }
+/* Si el número de tarjetas es impar, la última ocupa toda la fila. */
+.ct-place:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
 /* Inicio: consejos de viaje, una fila de iconos enmarcados. */
 .tips { list-style: none; margin: 46px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--column-gap); }
@@ -89,6 +91,15 @@ img { max-width: 100%; }
 .prose th, .prose td { padding: 14px 16px 14px 0; border-bottom: var(--border-hairline) solid var(--rule); text-align: left; vertical-align: top; font: 14px/1.6 var(--font-sans); color: var(--text-body); }
 .prose th { font: 10px/1.4 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--text-index); font-weight: 400; }
 .prose td:first-child { font: 500 24px/1.15 var(--font-display); color: var(--text); white-space: nowrap; }
+
+/* Página de tours: la lista de operadores (TourList.astro). */
+.prose .tours { list-style: none; margin: 8px 0 28px; padding: 0; border-top: var(--border-hairline) solid var(--rule); }
+.prose .tours li { margin: 0; padding: 20px 0; border-bottom: var(--border-hairline) solid var(--rule); }
+.prose .tours h3 { margin: 0 0 6px; }
+.prose .tours h3 a { color: var(--text); text-decoration: none; }
+.prose .tours h3 a:hover { color: var(--link); }
+.prose .tours p { margin: 0 0 6px; }
+.prose .tour-meta { font: 10px/1.6 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-meta); }
 
 /* Pie: las páginas de la guía en su propia fila con línea. */
 .ct-footer { flex-wrap: wrap; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
