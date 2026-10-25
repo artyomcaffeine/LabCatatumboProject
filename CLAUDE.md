@@ -7,7 +7,7 @@ En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 ## Alcance del proyecto (fase actual: app)
 
 - Un mismo código y un mismo contenido sirven para la web y para la app. La web sigue siendo un sitio Astro estático (`output: 'static'`, sin SSR ni adaptadores) y se sigue publicando en GitHub Pages. Ningún cambio hecho para la app puede romper la web.
-- La app empaqueta el build estático (`dist/`). La herramienta nativa la elige quien desarrolla la app. Se recomienda Capacitor, porque usa `dist/` tal cual como `webDir`. Cuando se elija, anótala aquí.
+- La app empaqueta el build estático (`dist/`) con **Capacitor 8**, que usa `dist/` tal cual como `webDir`.
 - Idiomas: es, en, de, fr, con el enrutado i18n que trae Astro. Cada idioma tiene su prefijo (`/es/`, `/en/`, …).
 - El contenido está en Markdown, en `src/content/pages/<lang>/`.
 - **Entra en esta fase:** empaquetar la app para Android e iOS; que la app funcione sin internet, con todo el contenido, las fuentes y las imágenes dentro de la app (la web no necesita service worker); iconos, pantalla de inicio (splash) y preparación para las tiendas.
@@ -24,6 +24,11 @@ npm run dev       # http://localhost:4321
 npm run build     # sitio estático en dist/
 npm run preview   # sirve dist/
 npm run check     # revisa los tipos de .astro y .ts
+
+npm run app:build   # build de la app (astro build --mode app) y copia a android/ e ios/ (cap sync)
+npm run app:android # abre el proyecto en Android Studio (compilar, emulador, firmar)
+npm run app:ios     # abre el proyecto en Xcode (solo en macOS)
+npm run app:assets  # regenera iconos y splash desde assets/*.svg
 ```
 
 No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en un navegador.
@@ -32,12 +37,18 @@ No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en u
 
 ## La app (notas técnicas)
 
-- Para la app, compila con `npm run build` **sin** `PUBLIC_DEPLOY_TARGET`. Así la base es `/`. La variable `pages` es solo para la vista previa en GitHub Pages.
-- Las URLs tienen forma de carpeta (`trailingSlash: 'always'`): `/es/relampago/` es `es/relampago/index.html`. Comprueba pronto que la navegación funciona en el WebView de Android y de iOS.
+- Compila la app con `npm run app:build`, nunca con `npm run build` a secas. Usa `--mode app` (sin `PUBLIC_DEPLOY_TARGET`, así la base es `/`). La variable `pages` es solo para la vista previa en GitHub Pages.
+- Capacitor responde a toda ruta sin extensión (`/es/relampago/`) con el `index.html` de la raíz, como una SPA. Por eso, en modo `app`, `homeUrl()`/`pageUrl()` (`src/lib/pages.ts`) terminan los enlaces en `index.html` (`/es/relampago/index.html`). En la web los enlaces no cambian. Un enlace interno escrito a mano rompe la app: usa siempre esas funciones.
 - La raíz (`src/pages/index.astro`) redirige con JavaScript al idioma guardado en `localStorage` (`ct.lang`) o, si no hay, al del teléfono.
-- Los enlaces externos (créditos de las fotos) usan `target="_blank"`. Hay que decidir si se abren en el navegador del sistema.
+- Los enlaces externos (créditos de las fotos, fuentes) se abren en el navegador del sistema: Capacitor lo hace solo, en Android y en iOS, sin plugins.
 - Las fotos son CC BY-SA 2.0: su crédito tiene que seguir visible en la app.
-- Cuando se añadan las carpetas nativas y la configuración (p. ej. `android/`, `ios/`, `capacitor.config.*`), descríbelas aquí junto con los comandos para compilar la app.
+- `viewport-fit=cover`: la página llega bajo la barra de estado y la barra de gestos del teléfono. `site.css` añade `env(safe-area-inset-*)` a la barra superior y al pie. En la web sin muesca valen 0.
+- Archivos de la app:
+  - `capacitor.config.ts`: `appId` (provisional, ver `PLAN.md`), nombre y `webDir`.
+  - `android/`, `ios/`: proyectos nativos generados por Capacitor. Se versionan. La copia de `dist/` que llevan dentro (`android/app/src/main/assets/public`, `ios/App/App/public`) la ignora git: la crea `cap sync`.
+  - `assets/*.svg`: fuente del icono y del splash. Los PNG de `android/…/res` e `ios/…/Assets.xcassets` salen de aquí con `npm run app:assets`; no los edites a mano.
+  - Color de fondo del splash de Android 12+: `windowSplashScreenBackground` en `android/app/src/main/res/values/styles.xml`.
+- Para compilar Android hace falta el Android SDK (Android Studio); para iOS, macOS con Xcode.
 
 ## Cómo encaja todo
 

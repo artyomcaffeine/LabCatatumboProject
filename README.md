@@ -16,6 +16,19 @@ npm run preview   # previsualiza dist/ en local
 npm run check     # revisa los tipos
 ```
 
+## App para Android e iOS
+
+La app empaqueta el mismo sitio con [Capacitor](https://capacitorjs.com) y funciona sin internet.
+
+```sh
+npm run app:build     # compila el sitio para la app y lo copia a android/ e ios/
+npm run app:android   # abre Android Studio (necesita el Android SDK)
+npm run app:ios       # abre Xcode (solo en macOS)
+npm run app:assets    # regenera iconos y splash desde assets/*.svg
+```
+
+Repite `npm run app:build` después de cada cambio en el contenido o en el código, antes de compilar la app.
+
 ## Editar el contenido
 
 - **Texto de las páginas:** archivos Markdown en `src/content/pages/<idioma>/`. El nombre del archivo es la URL (`es/visitar.md` → `/es/visitar/`).
