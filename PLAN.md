@@ -22,28 +22,23 @@ Plan de trabajo vivo del proyecto. `CLAUDE.md` dice qué es el proyecto y qué e
 
 Objetivo: el mismo build estático (`dist/`) empaquetado como app de Android e iOS, con todo el contenido dentro. La web no cambia y no necesita service worker.
 
-- [ ] **1. Elegir Capacitor** y anotarlo en `CLAUDE.md`. Dependencias (y por qué):
-  - `@capacitor/core`, `@capacitor/cli`: el puente entre la web y la app nativa, y la herramienta de línea de comandos.
-  - `@capacitor/android`, `@capacitor/ios`: generan los proyectos nativos `android/` e `ios/`.
-  - `capacitor.config.ts` con `webDir: 'dist'`, más `appId` y `appName` (ver decisiones pendientes).
-- [ ] **2. Scripts npm**: `app:build` (`astro build && cap sync`), `app:android` (`cap open android`), `app:ios` (`cap open ios`). Siempre **sin** `PUBLIC_DEPLOY_TARGET`, para que la base sea `/`.
-- [ ] **3. Probar la navegación en el WebView, lo antes posible.** Riesgo conocido: el servidor local de Capacitor trata las rutas sin extensión (`/es/relampago/`) como una SPA y devuelve el `index.html` de la raíz. Eso rompería los enlaces entre páginas y podría crear un bucle con la redirección de idioma. Si falla:
-  - Opción A: un build solo para la app con `build.format: 'file'` (`es/relampago.html`), activado con una variable (`PUBLIC_DEPLOY_TARGET=app`) en `astro.config.mjs`. El build web no cambia.
-  - Opción B: que en la app los enlaces apunten a `…/index.html`.
-  - Elegir tras la prueba y anotarlo en el registro.
-- [ ] **4. Prueba sin conexión** (modo avión, en Android y en iOS): todas las páginas, los 4 idiomas, fuentes, fotos, selector de idioma, redirección de la raíz y que el idioma elegido se recuerda.
-- [ ] **5. Enlaces externos** (`target="_blank"`): abrirlos en el navegador del sistema con `@capacitor/browser` (dependencia: abre el navegador del teléfono desde la app). Un script pequeño en `Base.astro` que solo actúa si `Capacitor.isNativePlatform()`. Sin conexión, mostrar un aviso corto en vez de fallar en silencio. Los créditos CC BY-SA siguen visibles en la app.
-- [ ] **6. Configuración**: añadir `android` e `ios` al `exclude` de `tsconfig.json` (hoy incluye `**/*`). Las copias de `dist/` dentro de las carpetas nativas ya las ignoran los `.gitignore` que crea Capacitor.
-- [ ] **7. Icono y splash**: imágenes fuente en `assets/` (icono 1024×1024, splash 2732×2732, versión clara y oscura) y generarlas con `@capacitor/assets` (dependencia de desarrollo: crea todos los tamaños para ambas tiendas). Barra de estado y fondo del splash con `#142d31` (el `theme-color` actual).
+- [x] **1. Capacitor 8** instalado: `@capacitor/core`, `@capacitor/android`, `@capacitor/ios` y `@capacitor/cli`. `capacitor.config.ts` con `webDir: 'dist'`. Proyectos nativos `android/` e `ios/` creados (iOS con Swift Package Manager, sin CocoaPods).
+- [x] **2. Scripts npm**: `app:build` (`astro build --mode app && cap sync`), `app:android`, `app:ios`, `app:assets`. Se usa `--mode app` en vez de una variable de entorno para que funcione también en Windows.
+- [x] **3. Navegación en el WebView.** Confirmado en el código de Capacitor (Android `WebViewLocalServer`, iOS `CapacitorRouter`): toda ruta sin extensión devuelve el `index.html` de la raíz. Con el build web la app se quedaba en un bucle de redirecciones. Solución: opción B. En modo `app`, `homeUrl()`/`pageUrl()` terminan en `index.html`. La web no cambia.
+- [ ] **4. Prueba sin conexión en teléfonos reales.** Hecha en simulación: un servidor con la misma regla de rutas que Capacitor y Chromium sin acceso a internet. Las 20 páginas, los 4 idiomas, las fuentes y las fotos cargan, la raíz lleva al idioma del teléfono y se recuerda el idioma elegido. **Falta:** repetirla en Android y en iOS, en modo avión.
+- [x] **5. Enlaces externos**: Capacitor ya los abre en el navegador del sistema en Android y en iOS, así que no hace falta `@capacitor/browser`. Sin conexión, el navegador del sistema muestra su propio aviso.
+- [x] **6. Configuración**: `android` e `ios` excluidos en `tsconfig.json`.
+- [x] **7. Icono y splash**: fuentes en `assets/*.svg` (el dibujo de `public/icons/catatumbo.svg` sin el texto, que no se lee en un icono), generados con `@capacitor/assets` (`npm run app:assets`). Fondo `#142d31`, también para el splash del sistema en Android 12+.
+  - [x] Barra de estado: `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` en `site.css`. El hueco bajo la barra de estado toma el color de la barra superior, en modo claro y oscuro. **Falta:** mirarlo en un iPhone con muesca y en un Android reciente. La orientación horizontal (muesca a un lado) aún no tiene margen lateral.
 - [ ] **8. Preparación para las tiendas**:
   - Cuentas: Google Play Console (pago único) y Apple Developer Program (anual).
-  - Android: keystore de firma fuera del repo, con copia de seguridad.
+  - Android: keystore de firma fuera del repo, con copia de seguridad. Versión (`versionCode`/`versionName`) en `android/app/build.gradle`.
   - iOS: hace falta macOS con Xcode para compilar y subir.
   - Capturas de pantalla por idioma, textos de la ficha en es/en/de/fr (de y fr revisados por hablantes nativos antes de publicar).
   - Política de privacidad: página Markdown nueva en los 4 idiomas (las dos tiendas la piden). Formularios de privacidad de Apple y "Seguridad de los datos" de Google.
   - Ojo: Apple puede rechazar apps que solo envuelven una web (guía 4.2). El funcionamiento sin conexión ayuda; los widgets de la Fase 3 ayudarían más.
-- [ ] **9. Documentar** en `CLAUDE.md` las carpetas `android/`, `ios/`, `capacitor.config.ts` y los comandos para compilar la app.
-- [ ] **10. Comprobar que la web sigue igual**: `npm run check`, `npm run build` y un build con `PUBLIC_DEPLOY_TARGET=pages`.
+- [x] **9. Documentado** en `CLAUDE.md` (notas técnicas de la app) y en `README.md` (comandos).
+- [x] **10. La web sigue igual**: `npm run check` sin errores; con `npm run build` los enlaces siguen siendo `/es/relampago/` y la barra superior mide lo mismo (70 px / 60 px). El APK de depuración de Android compila (`./gradlew assembleDebug`). iOS no se ha compilado (necesita macOS).
 
 ---
 
@@ -103,9 +98,8 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 ## Decisiones pendientes
 
-- [ ] `appId` (p. ej. dominio invertido) y nombre de la app en las tiendas.
+- [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
-- [ ] Solución de rutas en el WebView si falla la prueba de la Fase 1 (opción A o B).
 - [ ] Lista inicial de operadores de tours y criterios para incluirlos.
 - [ ] ¿Enlaces de afiliado o patrocinados? (afecta al aviso, a la privacidad y a las tiendas).
 - [ ] Qué significa "cantidad de rayos" en la app: probabilidad, promedio histórico o conteo real.
@@ -116,4 +110,7 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 | Fecha | Decisión | Motivo |
 |---|---|---|
-| | | |
+| 2026-10-25 | Capacitor 8 para la app. | Usa `dist/` tal cual; un solo código para web y app. |
+| 2026-10-25 | En la app, los enlaces internos terminan en `index.html` (build con `--mode app`). | Capacitor sirve el `index.html` de la raíz para rutas sin extensión. Es el arreglo más pequeño y no toca la web. |
+| 2026-10-25 | Los enlaces externos se abren en el navegador del sistema, sin `@capacitor/browser`. | Capacitor ya lo hace solo en Android e iOS: una dependencia menos. |
+| 2026-10-25 | Icono sin el texto "CATATUMBO". | No se lee a tamaño de icono y el teléfono ya muestra el nombre debajo. |
