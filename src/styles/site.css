@@ -4,13 +4,15 @@
 /* Esquinas rectas en todas partes: es parte del diseño. */
 *, *::before, *::after { border-radius: 0 !important; box-sizing: border-box; }
 
-html { scroll-padding-top: var(--topbar-height); -webkit-text-size-adjust: 100%; }
+html { scroll-padding-top: calc(var(--topbar-height) + env(safe-area-inset-top, 0px)); -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body { background: var(--surface); color: var(--text); overflow-x: hidden; }
 img { max-width: 100%; }
 
-/* Barra superior */
-.ct-topbar { z-index: 1000; }
+/* Barra superior. Con viewport-fit=cover (la app y los iPhone con muesca) la página llega bajo la barra de estado
+   del teléfono: la barra superior crece lo que mida esta, y el pie deja sitio a la barra de gestos. En la web
+   sin muesca, env() vale 0 y nada cambia. */
+.ct-topbar { z-index: 1000; height: calc(var(--topbar-height) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
 .ct-nav a[aria-current="page"] { color: var(--rust); }
 .ct-menu-button .i-x { display: none; }
 .ct-menu-button.is-open .i-x { display: inline; }
@@ -89,7 +91,7 @@ img { max-width: 100%; }
 .prose td:first-child { font: 500 24px/1.15 var(--font-display); color: var(--text); white-space: nowrap; }
 
 /* Pie: las páginas de la guía en su propia fila con línea. */
-.ct-footer { flex-wrap: wrap; }
+.ct-footer { flex-wrap: wrap; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
 .footer-nav { order: 1; flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px 26px; padding-top: 14px; border-top: var(--border-hairline) solid var(--rule); }
 .ct-footer .footer-nav a { color: var(--text); text-decoration: none; }
 .ct-footer .footer-nav a:hover { color: var(--link); }
@@ -113,7 +115,10 @@ img { max-width: 100%; }
   .tips { grid-template-columns: 1fr 1fr; row-gap: 40px; }
 }
 @media (max-width: 650px) {
-  html { scroll-padding-top: var(--topbar-height-sm); }
+  html { scroll-padding-top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
+  .ct-topbar { height: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
+  .ct-nav { top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
+  .ct-footer { padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .ct-flag { display: none; }
   .welcome-grid { grid-template-columns: 1fr; }
   .welcome-photo { aspect-ratio: 5 / 4; }
