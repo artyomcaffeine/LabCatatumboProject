@@ -1,7 +1,7 @@
 ---
 key: today
 title: Today on the lake
-description: Tonight's forecast and the week ahead at the Catatumbo.
+description: Tonight's forecast, the week ahead at the Catatumbo, and how far away you are.
 order: 6
 ---
 
@@ -21,3 +21,7 @@ The page saves the last forecast it downloaded on your phone. Without internet i
 ### Where the data comes from
 
 From the free service [Open-Meteo](https://open-meteo.com/), which combines national weather models, for a fixed point at Congo Mirador. The page does not send your location.
+
+### The distance
+
+It is a straight line (not by road or river), worked out from your approximate location on your phone, without internet. The places' coordinates come from OpenStreetMap.

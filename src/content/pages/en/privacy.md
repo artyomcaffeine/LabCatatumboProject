@@ -20,7 +20,7 @@ Only **the language you choose**, so the guide opens in that language next time,
 
 - All texts, photos and fonts are inside the app. It works offline and does not connect to any server of ours.
 - Only the "Today on the lake" page uses the internet (see below).
-- It does not ask for access to your location, camera, microphone, contacts or photos.
+- It does not ask for access to your camera, microphone, contacts or photos. Your location, only if you use it (see below).
 - Google Play and the App Store handle their own data (downloads, payments, crash reports) under their own privacy policies.
 
 ### The website
@@ -30,6 +30,10 @@ The website is hosted on GitHub Pages. Like any server, GitHub may log technical
 ### The weather forecast
 
 When you open "Today on the lake", your device asks [Open-Meteo](https://open-meteo.com/en/terms) for the forecast for a fixed point on the lake, not for your location. Like any server, Open-Meteo receives your connection's IP address. We send it no other data.
+
+### Your location
+
+It is only requested if you tap "Calculate distance" on "Today on the lake", and your phone or browser asks for your permission first. An approximate location is used, on your device, to work out the distance to the lake. It is not stored and not sent to anyone, including us.
 
 ### Links to other sites
 

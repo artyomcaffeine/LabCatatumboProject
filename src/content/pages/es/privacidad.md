@@ -20,7 +20,7 @@ Solo **el idioma que eliges**, para abrir la guía en ese idioma la próxima vez
 
 - Todos los textos, fotos y fuentes van dentro de la app. Funciona sin conexión y no se conecta a ningún servidor nuestro.
 - Solo la página "Hoy en el lago" usa internet (ver más abajo).
-- No pide acceso a tu ubicación, cámara, micrófono, contactos ni fotos.
+- No pide acceso a la cámara, el micrófono, los contactos ni las fotos. La ubicación, solo si la usas (ver más abajo).
 - Google Play y la App Store tratan sus propios datos (descargas, pagos, informes de errores) según sus políticas de privacidad.
 
 ### La web
@@ -30,6 +30,10 @@ El sitio web se aloja en GitHub Pages. Como cualquier servidor, GitHub puede reg
 ### El pronóstico del tiempo
 
 Al abrir "Hoy en el lago", tu dispositivo pide el pronóstico a [Open-Meteo](https://open-meteo.com/en/terms) para un punto fijo del lago, no para tu ubicación. Como cualquier servidor, Open-Meteo recibe la dirección IP de tu conexión. No le enviamos ningún otro dato.
+
+### Tu ubicación
+
+Solo se pide si pulsas "Calcular distancia" en "Hoy en el lago", y el teléfono o el navegador te piden permiso antes. Se usa una ubicación aproximada, en tu dispositivo, para calcular la distancia hasta el lago. No se guarda y no se envía a nadie, tampoco a nosotros.
 
 ### Enlaces a otros sitios
 

@@ -50,6 +50,7 @@ No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en u
   - `android/`, `ios/`: proyectos nativos generados por Capacitor. Se versionan. La copia de `dist/` que llevan dentro (`android/app/src/main/assets/public`, `ios/App/App/public`) la ignora git: la crea `cap sync`.
   - `assets/*.svg`: fuente del icono y del splash. Los PNG de `android/…/res` e `ios/…/Assets.xcassets` salen de aquí con `npm run app:assets`; no los edites a mano.
   - Color de fondo del splash de Android 12+: `windowSplashScreenBackground` en `android/app/src/main/res/values/styles.xml`.
+  - Plugin `@capacitor/geolocation` (la distancia de "Hoy en el lago"). Permisos: `ACCESS_COARSE_LOCATION` en `AndroidManifest.xml` y los textos `NSLocation…UsageDescription` en `ios/App/App/Info.plist`. Tras añadir o quitar un plugin, `npm run app:build` (hace `cap sync`) y versiona los cambios de `android/` e `ios/`.
 - Para compilar Android hace falta el Android SDK (Android Studio); para iOS, macOS con Xcode.
 
 ## Cómo encaja todo

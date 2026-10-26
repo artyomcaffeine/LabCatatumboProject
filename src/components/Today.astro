@@ -1,7 +1,11 @@
 ---
-/* "Hoy en el lago" (página con key 'today'): el pronóstico de esta noche y de las 6 siguientes en Congo Mirador.
-   Lo pide el navegador a Open-Meteo al abrir la página y guarda el último en localStorage (ct.forecast):
-   sin conexión se ve ese, con su fecha. Sin JavaScript o sin ningún dato guardado, solo se ve un aviso. */
+/* "Hoy en el lago" (página con key 'today'), dos widgets:
+   - El pronóstico de esta noche y de las 6 siguientes en Congo Mirador. Lo pide el navegador a Open-Meteo al abrir la página
+     y guarda el último en localStorage (ct.forecast): sin conexión se ve ese, con su fecha.
+   - La distancia y la dirección desde donde estás hasta los lugares de la excursión. La ubicación solo se pide al pulsar
+     el botón, se usa en el teléfono y no se guarda ni se envía. En la app la pide @capacitor/geolocation (con los permisos
+     nativos); en la web, el mismo plugin usa la del navegador.
+   Sin JavaScript solo se ve un aviso. */
 import Icon from './Icon.astro';
 import { useTranslations, type Lang, type UIKey } from '../i18n/ui';
 
@@ -10,8 +14,14 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 /* Los textos que usa el script del navegador. */
 const KEYS: UIKey[] = ['today.tonight', 'today.storm', 'today.rain', 'today.wind', 'today.sunset', 'today.high', 'today.mid', 'today.low',
-  'today.loading', 'today.updated', 'today.offline', 'today.none'];
+  'today.loading', 'today.updated', 'today.offline', 'today.none', 'today.locating', 'today.denied', 'today.unavailable', 'today.dirs'];
 const text = Object.fromEntries(KEYS.map((k) => [k, t(k)]));
+/* Lugares de referencia (OpenStreetMap; por confirmar sobre el terreno, ver PLAN.md). */
+const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
+  { name: 'Puerto Concha', role: 'today.pier', lat: 9.0336, lon: -71.7502 },
+  { name: 'Congo Mirador', role: 'today.stilts', lat: 9.3859, lon: -71.8005 },
+  { name: 'Ologá', role: 'today.stilts', lat: 9.4316, lon: -71.8350 },
+];
 ---
 <section class="ct-section today" data-today data-lang={lang} data-t={JSON.stringify(text)}>
   <div class="ct-index mono-eyebrow">{t('today.index')}</div>
@@ -27,12 +37,26 @@ const text = Object.fromEntries(KEYS.map((k) => [k, t(k)]));
         <span>{t('today.source')}: <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo.com</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a></span>
       </p>
     </article>
+    <article class="ct-panel" data-distance>
+      <div class="ct-panel-head"><span class="ct-eyebrow mono-eyebrow">{t('today.you')}</span><Icon name="compass" size={20} /></div>
+      <h2 class="ct-panel-title display-panel">{t('today.distance')}</h2>
+      <p class="ct-panel-micro copy-small">{t('today.private')}</p>
+      <dl class="ct-reading-grid places mono-data">
+        {PLACES.map((p) => (
+          <div data-lat={p.lat} data-lon={p.lon}><dt>{p.name}<small>{t(p.role)}</small></dt><dd>–</dd></div>
+        ))}
+      </dl>
+      <button class="ct-button mono-action" type="button" data-locate hidden>{t('today.locate')}</button>
+      <p class="ct-panel-micro copy-small locate-status" role="status" data-locate-status></p>
+    </article>
   </div>
   <h2 class="nights-title display-card">{t('today.nights')}</h2>
   <ol class="nights" data-nights></ol>
 </section>
 
 <script>
+  import { Geolocation } from '@capacitor/geolocation';
+
   const API = 'https://api.open-meteo.com/v1/forecast?latitude=9.3859&longitude=-71.8005'
     + '&hourly=weather_code,cape,precipitation_probability,wind_speed_10m&daily=sunset&timezone=America%2FCaracas&forecast_days=8';
   const STORE = 'ct.forecast';
@@ -133,5 +157,39 @@ const text = Object.fromEntries(KEYS.map((k) => [k, t(k)]));
     const saved = load();
     if (saved) show(saved, false); else status(t['today.loading']);
     download().then((fresh) => show(fresh, false)).catch(() => (saved ? show(saved, true) : status(t['today.none'])));
+
+    /* Distancia (fórmula del haversine) y rumbo inicial, en una esfera de 6371 km: de sobra para decenas de km. */
+    const panel = root.querySelector<HTMLElement>('[data-distance]')!;
+    const button = panel.querySelector<HTMLButtonElement>('[data-locate]')!;
+    const note = panel.querySelector<HTMLElement>('[data-locate-status]')!;
+    const dirs = t['today.dirs'].split(' ');
+    const km = new Intl.NumberFormat(lang, { style: 'unit', unit: 'kilometer', maximumFractionDigits: 0 });
+    const rad = (deg: number) => (deg * Math.PI) / 180;
+    function measure(lat1: number, lon1: number, lat2: number, lon2: number) {
+      const [a, b, dLon] = [rad(lat1), rad(lat2), rad(lon2 - lon1)];
+      const h = Math.sin((b - a) / 2) ** 2 + Math.cos(a) * Math.cos(b) * Math.sin(dLon / 2) ** 2;
+      const distance = 2 * 6371 * Math.asin(Math.sqrt(h));
+      const bearing = (Math.atan2(Math.sin(dLon) * Math.cos(b), Math.cos(a) * Math.sin(b) - Math.sin(a) * Math.cos(b) * Math.cos(dLon)) * 180) / Math.PI;
+      return { distance, dir: dirs[Math.round(((bearing + 360) % 360) / 45) % 8] };
+    }
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      note.textContent = t['today.locating'];
+      try {
+        const { coords } = await Geolocation.getCurrentPosition({ enableHighAccuracy: false, timeout: 20000, maximumAge: 300000 });
+        panel.querySelectorAll<HTMLElement>('[data-lat]').forEach((row) => {
+          const { distance, dir } = measure(coords.latitude, coords.longitude, Number(row.dataset.lat), Number(row.dataset.lon));
+          row.querySelector('dd')!.textContent = distance < 1 ? `< ${km.format(1)}` : `${km.format(distance)} · ${dir}`;
+        });
+        note.textContent = '';
+      } catch (err) {
+        /* Permiso denegado: código 1 en el navegador; OS-PLUG-GLOC-0003 (denegado) u 0008 (restringido) en la app. */
+        const code = (err as { code?: number | string }).code;
+        note.textContent = code === 1 || code === 'OS-PLUG-GLOC-0003' || code === 'OS-PLUG-GLOC-0008' ? t['today.denied'] : t['today.unavailable'];
+      } finally {
+        button.disabled = false;
+      }
+    });
   }
 </script>
