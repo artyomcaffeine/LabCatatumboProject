@@ -14,17 +14,22 @@ This guide, on the web and in the app for Android and iOS, has no accounts or si
 
 ### What is stored on your device
 
-Only **the language you choose**, so the guide opens in that language next time. It is stored on your phone or in your browser (local storage) and never leaves it. It is deleted when you clear the app's data or this site's data in your browser.
+Only **the language you choose**, so the guide opens in that language next time, and **the last weather forecast** downloaded by the "Today on the lake" page, so you can see it offline. They are stored on your phone or in your browser (local storage) and never leave it. They are deleted when you clear the app's data or this site's data in your browser.
 
 ### The app
 
 - All texts, photos and fonts are inside the app. It works offline and does not connect to any server of ours.
+- Only the "Today on the lake" page uses the internet (see below).
 - It does not ask for access to your location, camera, microphone, contacts or photos.
 - Google Play and the App Store handle their own data (downloads, payments, crash reports) under their own privacy policies.
 
 ### The website
 
 The website is hosted on GitHub Pages. Like any server, GitHub may log technical data about each visit, such as the IP address, for security reasons. This is explained in the [GitHub privacy statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+
+### The weather forecast
+
+When you open "Today on the lake", your device asks [Open-Meteo](https://open-meteo.com/en/terms) for the forecast for a fixed point on the lake, not for your location. Like any server, Open-Meteo receives your connection's IP address. We send it no other data.
 
 ### Links to other sites
 

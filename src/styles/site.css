@@ -105,6 +105,19 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .prose .tours p { margin: 0 0 6px; }
 .prose .tour-meta { font: 10px/1.6 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-meta); }
 
+/* Hoy en el lago (Today.astro): el panel de esta noche y la lista de las noches siguientes. */
+.today-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--column-gap); align-items: start; margin-top: 30px; }
+.today .ct-reading .display-figure { font-size: clamp(38px, 4.4vw, 58px); line-height: 1; }
+.today .storm-high .display-figure, .nights .storm-high { color: var(--rust); }
+.today .storm-low .display-figure { color: var(--text-muted); }
+.today-offline { margin: 0 0 16px; }
+.nights-title { margin: 56px 0 16px; color: var(--text); }
+.nights-title:has(+ .nights:empty) { display: none; }
+.nights { list-style: none; margin: 0; padding: 0; border-top: var(--border-hairline) solid var(--rule); }
+.nights li { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 10px var(--column-gap); align-items: end; padding: 16px 0; border-bottom: var(--border-hairline) solid var(--rule); font: 13px var(--font-mono); color: var(--text-body); }
+.nights small { display: block; margin-bottom: 5px; font: 9px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-meta); }
+.nights .night-date { color: var(--text); }
+
 /* Pie: las páginas de la guía en su propia fila con línea. */
 .ct-footer { flex-wrap: wrap; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
 .footer-nav { order: 1; flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px 26px; padding-top: 14px; border-top: var(--border-hairline) solid var(--rule); }
@@ -128,6 +141,7 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
   .welcome-grid { grid-template-columns: 1fr 1fr; }
   .welcome-head { grid-column: 1 / -1; padding-top: 30px; }
   .tips { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+  .today-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 650px) {
   html { scroll-padding-top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
@@ -140,6 +154,8 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
   .welcome-mark { top: 22px; font-size: 34vw; }
   .tips { gap: 34px 20px; }
   .tip-icon { width: 64px; height: 64px; }
+  .nights li { grid-template-columns: repeat(4, 1fr); }
+  .nights .night-date { grid-column: 1 / -1; }
   .page-mark { font-size: 30vw; }
   .page-title { margin-top: 24px; }
   .prose h2 { margin-top: 56px; }

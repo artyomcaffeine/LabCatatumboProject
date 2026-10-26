@@ -11,9 +11,10 @@ En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 - Idiomas: es, en, de, fr, con el enrutado i18n que trae Astro. Cada idioma tiene su prefijo (`/es/`, `/en/`, …).
 - El contenido está en Markdown, en `src/content/pages/<lang>/`.
 - **Entra en esta fase:** empaquetar la app para Android e iOS; que la app funcione sin internet, con todo el contenido, las fuentes y las imágenes dentro de la app (la web no necesita service worker); iconos, pantalla de inicio (splash) y preparación para las tiendas.
-- **No entra (fases futuras, no las prepares):** base de datos, CMS, cuentas/login, reservas, clima, GPS, mapas, notificaciones.
+- **También entra (Fase 3 de `PLAN.md`):** widgets de tiempo, de ubicación y de rayos, en la página "Hoy en el lago" (`key: today`). Cada widget pide sus datos desde el navegador al abrir la página, guarda el último dato con su fecha y, sin conexión, lo muestra con esa fecha. Nunca bloquean el resto de la guía. La ubicación se usa solo en el teléfono: ni se guarda ni se envía.
+- **No entra (fases futuras, no las prepares):** base de datos, CMS, cuentas/login, reservas, mapas, notificaciones.
 - Dependencias: se pueden añadir las que hagan falta, incluidos frameworks de UI. Explica en el cambio por qué se añade cada una.
-- Nada de embeds de terceros esenciales (mapas, vídeos, widgets): la app tiene que funcionar sin internet.
+- Nada de embeds de terceros esenciales (mapas, vídeos, widgets de otros sitios): la app tiene que funcionar sin internet. Los widgets propios piden datos a APIs públicas (Open-Meteo) con `fetch`, sin cargar scripts de fuera.
 - Prefiere pocos archivos. Explica cada cambio en lenguaje sencillo antes de hacerlo. Trabaja en pasos pequeños.
 - `PLAN.md` es el plan de trabajo vivo: pasos pendientes, decisiones abiertas y registro de decisiones. Actualízalo al terminar cada paso.
 - `docs/guia/` es una guía para juniors que explica el proyecto paso a paso con extractos del código. Si cambias la arquitectura, un comando o una regla, actualiza el capítulo que lo explica.

@@ -8,7 +8,7 @@ import { z } from 'astro/zod';
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: ({ image }) => z.object({
-    key: z.enum(['lightning', 'visit', 'tours', 'places', 'history', 'privacy']),
+    key: z.enum(['lightning', 'visit', 'tours', 'places', 'history', 'today', 'privacy']),
     title: z.string(),
     description: z.string(),
     /* Posición en el menú y en la página de inicio. */

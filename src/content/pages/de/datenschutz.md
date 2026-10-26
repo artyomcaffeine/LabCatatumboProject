@@ -15,17 +15,22 @@ Dieser Führer, im Web und in der App für Android und iOS, verlangt keine Konte
 
 ### Was auf deinem Gerät gespeichert wird
 
-Nur **die Sprache, die du wählst**, damit der Führer beim nächsten Mal in dieser Sprache öffnet. Sie wird auf deinem Handy oder in deinem Browser gespeichert (lokaler Speicher) und verlässt ihn nie. Sie wird gelöscht, wenn du die Daten der App oder die Daten dieser Website in deinem Browser löschst.
+Nur **die Sprache, die du wählst**, damit der Führer beim nächsten Mal in dieser Sprache öffnet, und **die letzte Wettervorhersage**, die die Seite „Heute am See“ geladen hat, damit du sie offline sehen kannst. Beides wird auf deinem Handy oder in deinem Browser gespeichert (lokaler Speicher) und verlässt es nie. Es wird gelöscht, wenn du die Daten der App oder die Daten dieser Website in deinem Browser löschst.
 
 ### Die App
 
 - Alle Texte, Fotos und Schriften sind in der App enthalten. Sie funktioniert offline und verbindet sich mit keinem unserer Server.
+- Nur die Seite „Heute am See“ nutzt das Internet (siehe unten).
 - Sie fragt nicht nach Zugriff auf deinen Standort, deine Kamera, dein Mikrofon, deine Kontakte oder Fotos.
 - Google Play und der App Store verarbeiten ihre eigenen Daten (Downloads, Zahlungen, Absturzberichte) nach ihren eigenen Datenschutzrichtlinien.
 
 ### Die Website
 
 Die Website wird auf GitHub Pages gehostet. Wie jeder Server kann GitHub aus Sicherheitsgründen technische Daten zu jedem Besuch protokollieren, etwa die IP-Adresse. Mehr dazu in der [Datenschutzerklärung von GitHub](https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement).
+
+### Die Wettervorhersage
+
+Wenn du „Heute am See“ öffnest, fragt dein Gerät bei [Open-Meteo](https://open-meteo.com/en/terms) die Vorhersage für einen festen Punkt am See ab, nicht für deinen Standort. Wie jeder Server erhält Open-Meteo die IP-Adresse deiner Verbindung. Andere Daten senden wir nicht.
 
 ### Links zu anderen Websites
 
