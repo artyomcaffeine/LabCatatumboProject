@@ -42,6 +42,10 @@ Repite `npm run app:build` después de cada cambio en el contenido o en el códi
 
 La vista previa está marcada como `noindex`, así que los buscadores no la indexan. Para el hosting final, ejecuta `npm run build` y sube `dist/` a cualquier hosting estático.
 
+## Guía para aprender a hacer un proyecto así
+
+En [`docs/guia/`](docs/guia/README.md) hay una guía paso a paso, para alguien junior, que usa este proyecto como ejemplo: sitio Astro multilingüe, GitHub Pages y app sin conexión con Capacitor.
+
 ## Créditos
 
 Fotografías: Fernando Flores, Wikimedia Commons, CC BY-SA 2.0. Iconos: Lucide (ISC). Tipografías: Fraunces, DM Sans, DM Mono (SIL OFL).
