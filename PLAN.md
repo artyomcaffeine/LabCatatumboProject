@@ -29,13 +29,15 @@ Objetivo: el mismo build estático (`dist/`) empaquetado como app de Android e i
 - [x] **5. Enlaces externos**: Capacitor ya los abre en el navegador del sistema en Android y en iOS, así que no hace falta `@capacitor/browser`. Sin conexión, el navegador del sistema muestra su propio aviso.
 - [x] **6. Configuración**: `android` e `ios` excluidos en `tsconfig.json`.
 - [x] **7. Icono y splash**: fuentes en `assets/*.svg` (el dibujo de `public/icons/catatumbo.svg` sin el texto, que no se lee en un icono), generados con `@capacitor/assets` (`npm run app:assets`). Fondo `#142d31`, también para el splash del sistema en Android 12+.
-  - [x] Barra de estado: `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` en `site.css`. El hueco bajo la barra de estado toma el color de la barra superior, en modo claro y oscuro. **Falta:** mirarlo en un iPhone con muesca y en un Android reciente. La orientación horizontal (muesca a un lado) aún no tiene margen lateral.
+  - [x] Barra de estado: `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` en `site.css`. El hueco bajo la barra de estado toma el color de la barra superior, en modo claro y oscuro. En horizontal, `body` se aparta `env(safe-area-inset-left/right)`: el contenido no queda bajo la muesca y los fondos de las franjas se detienen ahí, como en Safari sin `viewport-fit=cover` (probado simulando 47 px). **Falta:** mirarlo en un iPhone con muesca y en un Android reciente, en vertical y en horizontal.
 - [ ] **8. Preparación para las tiendas**:
   - Cuentas: Google Play Console (pago único) y Apple Developer Program (anual).
   - Android: keystore de firma fuera del repo, con copia de seguridad. Versión (`versionCode`/`versionName`) en `android/app/build.gradle`.
   - iOS: hace falta macOS con Xcode para compilar y subir.
   - Capturas de pantalla por idioma, textos de la ficha en es/en/de/fr (de y fr revisados por hablantes nativos antes de publicar).
-  - Política de privacidad: página Markdown nueva en los 4 idiomas (las dos tiendas la piden). Formularios de privacidad de Apple y "Seguridad de los datos" de Google.
+  - [x] Política de privacidad: página en los 4 idiomas (`es/privacidad.md`, `en/privacy.md`, `de/datenschutz.md`, `fr/confidentialite.md`; de y fr en borrador), enlazada desde el pie. No sale en el menú ni en la portada (`menu: false`). Dice lo que hay hoy: ningún dato personal, solo el idioma elegido guardado en el dispositivo, la app sin permisos ni servidor, la web en GitHub Pages. Su URL pública es la que se pone en las fichas de las tiendas.
+  - Falta en la política: un correo de contacto (ver decisiones pendientes). Si cambia el alojamiento de la web, cambiar el apartado "La web".
+  - Formularios de privacidad de Apple y "Seguridad de los datos" de Google: con la app de hoy, la respuesta es "no se recogen datos".
   - Ojo: Apple puede rechazar apps que solo envuelven una web (guía 4.2). El funcionamiento sin conexión ayuda; los widgets de la Fase 3 ayudarían más.
 - [x] **9. Documentado** en `CLAUDE.md` (notas técnicas de la app) y en `README.md` (comandos).
 - [x] **10. La web sigue igual**: `npm run check` sin errores; con `npm run build` los enlaces siguen siendo `/es/relampago/` y la barra superior mide lo mismo (70 px / 60 px). El APK de depuración de Android compila (`./gradlew assembleDebug`). iOS no se ha compilado (necesita macOS).
@@ -131,6 +133,7 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 - [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
+- [ ] Correo de contacto para la política de privacidad y las fichas de las tiendas (las dos tiendas lo piden).
 - [ ] Lista inicial de operadores de tours (por definir; candidatos en la Fase 2).
 - [ ] Alojamiento del servidor del formulario y servicio de correo (Fase 2, servidor propio).
 - [ ] ¿Los operadores pagan por aparecer o por las solicitudes? Si es así, hay que cambiar el aviso de la página de tours.
@@ -151,4 +154,6 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-26 | Operadores por definir; `tours.yaml` sigue vacío. | Aún no hay operadores elegidos. |
 | 2026-10-26 | Se aprueban los criterios para incluir operadores (Fase 2). | Cubren seguridad, trato con las comunidades y vigencia de los datos. |
 | 2026-10-26 | Habrá un formulario de solicitud que el cliente rellena y se envía al operador. | El cliente contacta con el operador sin salir de la guía. Falta elegir cómo se envía. |
+| 2026-10-26 | Política de privacidad como página Markdown fuera del menú (`menu: false`), enlazada desde el pie. | Las tiendas piden una URL pública; así sirve también dentro de la app y sin conexión. |
+| 2026-10-26 | En horizontal, todo el `body` se aparta de la muesca. | Una sola regla CSS en vez de tocar cada franja; es lo mismo que hace Safari por defecto. |
 | 2026-10-26 | El formulario se envía con un servidor propio (opción C). | Máximo control sobre el envío y los datos. Implica un servidor pequeño aparte del sitio estático, con su coste y mantenimiento. |
