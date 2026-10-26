@@ -50,12 +50,31 @@ Encaja en la fase actual: son enlaces, no embeds de terceros.
 - [x] Lista de operadores como colección de datos (`src/content/tours.yaml`): un solo archivo para los 4 idiomas, así cada URL se escribe una vez. Campos: `name`, `url`, `base` (de dónde sale), `langs` (idiomas del guía), `reviewed` (fecha de revisión) y `note` opcional por idioma. La muestra `TourList.astro`; si está vacía, dice que la lista está en revisión.
 - [x] Aviso en cada idioma bajo la lista: es orientativa, no avalamos a ningún operador, confirmar precios y condiciones con el operador. Cada operador muestra su fecha de revisión.
 - [x] En la app los enlaces se abren en el navegador del sistema. Sin conexión la lista se ve, pero los sitios de los operadores no.
-- [ ] **Lista inicial de operadores** (decisión pendiente). Candidatos encontrados en artículos antiguos, **sin verificar**: no los he publicado porque sus webs no respondían (error 503, octubre de 2026) y las fuentes son de 2015–2018.
+- [ ] **Lista inicial de operadores: por definir** (decisión del 2026-10-26). Mientras tanto, `tours.yaml` sigue vacío. Candidatos encontrados en artículos antiguos, **sin verificar**: no los he publicado porque sus webs no respondían (error 503, octubre de 2026) y las fuentes son de 2015–2018.
   - Alan Highton / Catatumbo Tour (`cocolight.com`, `catatumbotour.com`): tours de 2–3 días desde Mérida (Rough Guides 2018, The Guardian 2015).
   - Saiga Tours (`saigatours.com`): agencia internacional con un viaje a Venezuela que incluye una noche viendo el relámpago (fin de año 2026–27).
   - Agencias de Mérida y posadas de los palafitos (Ologá, Congo Mirador): buscar contacto directo.
-- [ ] Criterios para incluir a un operador. Propuesta: web o contacto que responde; sale de la zona (Mérida, Santa Bárbara, Puerto Concha) o trabaja con guías locales; chalecos salvavidas; respeta las normas del parque nacional y a las comunidades; revisión cada 6 meses (fecha `reviewed`).
+- [x] **Criterios para incluir a un operador** (aprobados el 2026-10-26):
+  - Su web o su contacto responde.
+  - Sale de la zona (Mérida, Santa Bárbara, Puerto Concha) o trabaja con guías locales.
+  - Lleva chalecos salvavidas para todos.
+  - Respeta las normas del parque nacional y a las comunidades de los palafitos.
+  - Se revisa cada 6 meses (fecha `reviewed` en `tours.yaml`).
 - [ ] Revisar la lista periódicamente (enlaces rotos, operadores que cierran).
+
+### Formulario de solicitud de tour (decidido el 2026-10-26, sin empezar)
+
+El cliente rellena un formulario y la solicitud le llega al operador. No es una reserva: no hay pago ni disponibilidad en tiempo real; el operador contesta al cliente. Aun así roza "reservas", que `CLAUDE.md` deja fuera de alcance: al empezar, actualizar el alcance en `CLAUDE.md`.
+
+- [ ] **Elegir cómo se envía** (decisión pendiente):
+  - **A. Desde las apps del propio cliente (recomendado para empezar).** El formulario prepara el mensaje y abre el correo (`mailto:`) o WhatsApp (`wa.me`) del cliente, ya dirigido al operador. Sin servidor, sin coste, sin datos guardados por nosotros. Funciona en la web y en la app; sin conexión, el correo queda en la bandeja de salida. Contra: no nos llega copia y no sabemos cuántas solicitudes hay.
+  - **B. Servicio de formularios** (Formspree, Web3Forms o similar). Un servidor ajeno recibe el formulario y lo reenvía por correo al operador. Contra: necesita internet al enviar, coste según volumen, un tercero trata datos personales (política de privacidad, ficha de las tiendas) y hace falta protección contra spam.
+  - **C. Servidor propio** (una función en la nube). Máximo control, pero rompe la regla de sitio solo estático y es lo que más mantenimiento pide.
+- [ ] Datos de contacto de cada operador para recibir solicitudes: añadir `email` y/o `whatsapp` a `tours.yaml` (y comprobarlos con la revisión de cada 6 meses).
+- [ ] Campos del formulario: nombre, forma de contacto (correo o WhatsApp), fecha deseada, número de personas, idioma, punto de salida, mensaje libre y una casilla de consentimiento que enlaza la política de privacidad. Los 4 idiomas en `ui.ts`.
+- [ ] Dónde va: un botón "Solicitar" en cada operador de `TourList.astro` que abre el formulario con el operador ya elegido.
+- [ ] Sin conexión: el formulario se ve; si se elige B, guardar el borrador en el teléfono y avisar de que se enviará con conexión.
+- [ ] Privacidad: no guardar datos más allá de lo necesario; actualizar la política de privacidad (Fase 1, paso 8) y los formularios de las tiendas según la opción elegida.
 
 ---
 
@@ -104,8 +123,9 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 - [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
-- [ ] Lista inicial de operadores de tours y criterios para incluirlos (candidatos y propuesta de criterios en la Fase 2).
-- [ ] ¿Enlaces de afiliado o patrocinados? (afecta al aviso, a la privacidad y a las tiendas).
+- [ ] Lista inicial de operadores de tours (por definir; candidatos en la Fase 2).
+- [ ] Cómo se envía el formulario de solicitud: A, B o C (Fase 2).
+- [ ] ¿Los operadores pagan por aparecer o por las solicitudes? Si es así, hay que cambiar el aviso de la página de tours.
 - [ ] Qué significa "cantidad de rayos" en la app: probabilidad, promedio histórico o conteo real.
 - [ ] Coordenadas de referencia para el tiempo y la distancia.
 - [ ] Presupuesto para APIs o servidor (si se elige algo que no sea gratis).
@@ -120,3 +140,6 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-25 | Icono sin el texto "CATATUMBO". | No se lee a tamaño de icono y el teléfono ya muestra el nombre debajo. |
 | 2026-10-25 | Operadores en una colección de datos (`tours.yaml`), no en Markdown. | Una sola lista para los 4 idiomas: cada URL y cada fecha se escriben una vez. |
 | 2026-10-25 | No publicar operadores sin verificar. | Sus webs no respondían y las fuentes eran antiguas; un enlace roto o un operador cerrado daña la confianza en la guía. |
+| 2026-10-26 | Operadores por definir; `tours.yaml` sigue vacío. | Aún no hay operadores elegidos. |
+| 2026-10-26 | Se aprueban los criterios para incluir operadores (Fase 2). | Cubren seguridad, trato con las comunidades y vigencia de los datos. |
+| 2026-10-26 | Habrá un formulario de solicitud que el cliente rellena y se envía al operador. | El cliente contacta con el operador sin salir de la guía. Falta elegir cómo se envía. |
