@@ -66,15 +66,23 @@ Encaja en la fase actual: son enlaces, no embeds de terceros.
 
 El cliente rellena un formulario y la solicitud le llega al operador. No es una reserva: no hay pago ni disponibilidad en tiempo real; el operador contesta al cliente. Aun así roza "reservas", que `CLAUDE.md` deja fuera de alcance: al empezar, actualizar el alcance en `CLAUDE.md`.
 
-- [ ] **Elegir cómo se envía** (decisión pendiente):
+- [x] **Cómo se envía: opción C, servidor propio** (decidido el 2026-10-26). Opciones que se valoraron:
   - **A. Desde las apps del propio cliente (recomendado para empezar).** El formulario prepara el mensaje y abre el correo (`mailto:`) o WhatsApp (`wa.me`) del cliente, ya dirigido al operador. Sin servidor, sin coste, sin datos guardados por nosotros. Funciona en la web y en la app; sin conexión, el correo queda en la bandeja de salida. Contra: no nos llega copia y no sabemos cuántas solicitudes hay.
   - **B. Servicio de formularios** (Formspree, Web3Forms o similar). Un servidor ajeno recibe el formulario y lo reenvía por correo al operador. Contra: necesita internet al enviar, coste según volumen, un tercero trata datos personales (política de privacidad, ficha de las tiendas) y hace falta protección contra spam.
   - **C. Servidor propio** (una función en la nube). Máximo control, pero rompe la regla de sitio solo estático y es lo que más mantenimiento pide.
+- [ ] **Qué implica el servidor propio** (pasos, en este orden):
+  1. Actualizar el alcance en `CLAUDE.md`: el sitio y la app siguen siendo estáticos; el formulario es la única pieza con servidor, en su propia carpeta (`server/`), con su propio despliegue. Un fallo del servidor no puede romper la web ni la app.
+  2. Elegir dónde se aloja (p. ej. Cloudflare Workers, Netlify Functions o Vercel Functions; todas tienen plan gratuito) y con qué se envía el correo al operador (p. ej. Resend, Postmark o Amazon SES). Anotar el coste esperado.
+  3. Un solo punto de entrada (`POST /solicitud`). Valida los campos, busca el correo del operador **en el servidor** (a partir de `tours.yaml`, copiado al desplegar) y envía el correo con copia de confirmación al cliente. El navegador nunca manda la dirección de destino: así nadie puede usar el servidor para enviar correo a cualquiera.
+  4. Seguridad: claves solo en los secretos del alojamiento (nunca en el repo), CORS limitado a la web y a la app (`https://localhost` en Android, `capacitor://localhost` en iOS), límite de envíos por IP y un campo trampa contra bots. Evitar captchas que carguen scripts de terceros.
+  5. Datos: no guardar las solicitudes en una base de datos (también fuera de alcance); solo registros técnicos mínimos y por poco tiempo.
+  6. La URL del servidor llega al sitio con una variable (`PUBLIC_FORM_URL`). Si no está definida, el botón "Solicitar" no aparece: la web y la app siguen funcionando sin servidor.
+  7. Sin conexión (o con el servidor caído): guardar el borrador en el teléfono, avisar y reintentar al recuperar la conexión.
 - [ ] Datos de contacto de cada operador para recibir solicitudes: añadir `email` y/o `whatsapp` a `tours.yaml` (y comprobarlos con la revisión de cada 6 meses).
 - [ ] Campos del formulario: nombre, forma de contacto (correo o WhatsApp), fecha deseada, número de personas, idioma, punto de salida, mensaje libre y una casilla de consentimiento que enlaza la política de privacidad. Los 4 idiomas en `ui.ts`.
 - [ ] Dónde va: un botón "Solicitar" en cada operador de `TourList.astro` que abre el formulario con el operador ya elegido.
-- [ ] Sin conexión: el formulario se ve; si se elige B, guardar el borrador en el teléfono y avisar de que se enviará con conexión.
-- [ ] Privacidad: no guardar datos más allá de lo necesario; actualizar la política de privacidad (Fase 1, paso 8) y los formularios de las tiendas según la opción elegida.
+- [ ] Privacidad: actualizar la política de privacidad (Fase 1, paso 8) y los formularios de las tiendas. La app recoge datos personales (nombre, contacto) y los envía a nuestro servidor: hay que declararlo en Google Play ("Seguridad de los datos") y en Apple (etiqueta de privacidad).
+- [ ] Depende de que haya operadores: no tiene sentido desplegarlo con `tours.yaml` vacío.
 
 ---
 
@@ -124,7 +132,7 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 - [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
 - [ ] Lista inicial de operadores de tours (por definir; candidatos en la Fase 2).
-- [ ] Cómo se envía el formulario de solicitud: A, B o C (Fase 2).
+- [ ] Alojamiento del servidor del formulario y servicio de correo (Fase 2, servidor propio).
 - [ ] ¿Los operadores pagan por aparecer o por las solicitudes? Si es así, hay que cambiar el aviso de la página de tours.
 - [ ] Qué significa "cantidad de rayos" en la app: probabilidad, promedio histórico o conteo real.
 - [ ] Coordenadas de referencia para el tiempo y la distancia.
@@ -143,3 +151,4 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-26 | Operadores por definir; `tours.yaml` sigue vacío. | Aún no hay operadores elegidos. |
 | 2026-10-26 | Se aprueban los criterios para incluir operadores (Fase 2). | Cubren seguridad, trato con las comunidades y vigencia de los datos. |
 | 2026-10-26 | Habrá un formulario de solicitud que el cliente rellena y se envía al operador. | El cliente contacta con el operador sin salir de la guía. Falta elegir cómo se envía. |
+| 2026-10-26 | El formulario se envía con un servidor propio (opción C). | Máximo control sobre el envío y los datos. Implica un servidor pequeño aparte del sitio estático, con su coste y mantenimiento. |
