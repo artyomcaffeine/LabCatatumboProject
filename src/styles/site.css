@@ -9,6 +9,10 @@ html { scroll-padding-top: calc(var(--topbar-height) + env(safe-area-inset-top, 
 body { background: var(--surface); color: var(--text); overflow-x: hidden; }
 img { max-width: 100%; }
 
+/* En horizontal, la muesca y las esquinas redondeadas quedan a un lado: todo el contenido se aparta lo que midan.
+   Los fondos de las franjas también, como hace Safari sin viewport-fit=cover. En vertical y en la web, env() vale 0. */
+body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+
 /* Barra superior. Con viewport-fit=cover (la app y los iPhone con muesca) la página llega bajo la barra de estado
    del teléfono: la barra superior crece lo que mida esta, y el pie deja sitio a la barra de gestos. En la web
    sin muesca, env() vale 0 y nada cambia. */
