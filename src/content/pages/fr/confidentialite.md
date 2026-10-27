@@ -15,12 +15,12 @@ Ce guide, sur le web et dans l'application pour Android et iOS, ne demande ni co
 
 ### Ce qui est enregistré sur votre appareil
 
-Seulement **la langue que vous choisissez**, pour ouvrir le guide dans cette langue la prochaine fois, et **les dernières prévisions météo** téléchargées par la page « Aujourd’hui sur le lac », pour les voir hors connexion. Elles sont enregistrées sur votre téléphone ou dans votre navigateur (stockage local) et n'en sortent jamais. Elles sont effacées quand vous effacez les données de l'application ou les données de ce site dans votre navigateur.
+Seulement **la langue que vous choisissez**, pour ouvrir le guide dans cette langue la prochaine fois, et **les dernières prévisions météo** téléchargées par la page « Météo et localisation », pour les voir hors connexion. Elles sont enregistrées sur votre téléphone ou dans votre navigateur (stockage local) et n'en sortent jamais. Elles sont effacées quand vous effacez les données de l'application ou les données de ce site dans votre navigateur.
 
 ### L'application
 
 - Tous les textes, photos et polices sont dans l'application. Elle fonctionne hors connexion et ne se connecte à aucun de nos serveurs.
-- Seule la page « Aujourd’hui sur le lac » utilise internet (voir plus bas).
+- Seule la page « Météo et localisation » utilise internet (voir plus bas).
 - Elle ne demande pas l'accès à votre appareil photo, à votre micro, à vos contacts ni à vos photos. Votre position, seulement si vous l'utilisez (voir plus bas).
 - Google Play et l'App Store traitent leurs propres données (téléchargements, paiements, rapports de plantage) selon leurs propres politiques de confidentialité.
 
@@ -30,11 +30,11 @@ Le site web est hébergé sur GitHub Pages. Comme tout serveur, GitHub peut enre
 
 ### Les prévisions météo
 
-Quand vous ouvrez « Aujourd’hui sur le lac », votre appareil demande à [Open-Meteo](https://open-meteo.com/en/terms) les prévisions pour un point fixe du lac, pas pour votre position. Comme tout serveur, Open-Meteo reçoit l'adresse IP de votre connexion. Nous ne lui envoyons aucune autre donnée.
+Quand vous ouvrez « Météo et localisation », votre appareil demande à [Open-Meteo](https://open-meteo.com/en/terms) les prévisions pour un point fixe du lac, pas pour votre position. Comme tout serveur, Open-Meteo reçoit l'adresse IP de votre connexion. Nous ne lui envoyons aucune autre donnée.
 
 ### Votre position
 
-Elle n'est demandée que si vous touchez « Afficher ma position » sur « Aujourd’hui sur le lac », et votre téléphone ou votre navigateur vous demande d'abord l'autorisation. Votre position précise est utilisée, sur votre appareil, pour vous montrer sur la carte et calculer la distance jusqu'aux lieux de l'excursion. Elle se met à jour tant que la page est ouverte et n'est plus utilisée quand vous la quittez. Elle n'est ni enregistrée ni envoyée à personne, pas même à nous.
+Elle n'est demandée que si vous touchez « Afficher ma position » sur « Météo et localisation », et votre téléphone ou votre navigateur vous demande d'abord l'autorisation. Votre position précise est utilisée, sur votre appareil, pour vous montrer sur la carte et calculer la distance jusqu'aux lieux de l'excursion. Elle se met à jour tant que la page est ouverte et n'est plus utilisée quand vous la quittez. Elle n'est ni enregistrée ni envoyée à personne, pas même à nous.
 
 ### La carte
 

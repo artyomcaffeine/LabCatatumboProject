@@ -1,6 +1,6 @@
 ---
 key: today
-title: Today on the lake
+title: Weather and location
 description: Tonight's forecast, the week ahead at the Catatumbo, and a map with the places and your position.
 order: 6
 ---

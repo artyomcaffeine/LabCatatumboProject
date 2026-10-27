@@ -1,6 +1,6 @@
 ---
 key: today
-title: Heute am See
+title: Wetter und Standort
 description: Die Vorhersage für heute Nacht und die kommende Woche am Catatumbo, und eine Karte mit den Orten und deiner Position.
 order: 6
 draft_translation: true
