@@ -41,7 +41,7 @@ Astro genera HTML a partir de componentes (`.astro`) y de Markdown. Por defecto 
    });
    ```
 
-   `trailingSlash: 'always'` hace que cada página sea una carpeta con su `index.html`: `/es/visitar/` → `es/visitar/index.html`. Es la forma que mejor funciona en GitHub Pages. (En el capítulo 6 verás que la app necesita un ajuste por esto.)
+   `trailingSlash: 'always'` hace que cada página sea una carpeta con su `index.html`: `/es/ejemplo/` → `es/ejemplo/index.html`. Es la forma que mejor funciona en GitHub Pages. (En el capítulo 6 verás que la app necesita un ajuste por esto.)
 
 5. Crea el layout común, `src/layouts/Base.astro`: el `<head>`, la barra superior, un `<slot />` para el contenido de cada página y el pie. Todas las páginas lo usan, así el `<head>` se escribe una sola vez.
 
@@ -54,7 +54,7 @@ Astro genera HTML a partir de componentes (`.astro`) y de Markdown. Por defecto 
 ## Dónde verlo en el ejemplo
 
 - `src/layouts/Base.astro`: el `<head>` completo. Fíjate en `lang`, `description`, `theme-color`, los iconos (`asset('icons/…')`), los `hreflang` y el `preload` de las fuentes.
-- `src/components/`: cada pieza es un componente pequeño con un comentario arriba que explica qué es. `Topbar.astro` lleva el único JavaScript de la interfaz (abrir el menú en el móvil), escrito a mano y muy corto.
+- `src/components/`: cada pieza es un componente pequeño con un comentario arriba que explica qué es. `Topbar.astro` lleva el JavaScript de la barra (abrir el menú en el móvil, cerrar el selector de idioma), escrito a mano y muy corto.
 
 ## Errores comunes
 

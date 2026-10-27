@@ -4,7 +4,7 @@ El código es la mitad del proyecto. La otra mitad es cómo se decide, se compru
 
 ## 7.1 · Dos documentos que mandan
 
-- **`CLAUDE.md`: las reglas.** Qué es el proyecto, qué entra en la fase actual y qué no, los comandos, cómo encaja todo y cómo añadir cosas (una página, un idioma, un operador). Lo leen las personas y también los asistentes de IA que trabajan en el repo. Si una regla cambia, se cambia aquí.
+- **`CLAUDE.md`: las reglas.** Qué es el proyecto, qué entra en la fase actual y qué no, los comandos, cómo encaja todo y cómo añadir cosas (una página, un idioma). Lo leen las personas y también los asistentes de IA que trabajan en el repo. Si una regla cambia, se cambia aquí.
 - **`PLAN.md`: el plan vivo.** Las fases con casillas (`[ ]` / `[x]`), las **decisiones pendientes** y un **registro de decisiones** con fecha y motivo. Cuando alguien pregunta "¿por qué se hizo así?", la respuesta está en el registro.
 
 Ejemplo real del registro:
@@ -12,14 +12,14 @@ Ejemplo real del registro:
 | Fecha | Decisión | Motivo |
 |---|---|---|
 | 2026-10-25 | En la app, los enlaces internos terminan en `index.html`. | Capacitor sirve el `index.html` de la raíz para rutas sin extensión. Es el arreglo más pequeño y no toca la web. |
-| 2026-10-25 | No publicar operadores sin verificar. | Sus webs no respondían; un enlace roto daña la confianza en la guía. |
+| 2026-10-25 | Los enlaces externos se abren en el navegador del sistema, sin `@capacitor/browser`. | Capacitor ya lo hace solo en Android e iOS: una dependencia menos. |
 
 ## 7.2 · Pasos pequeños
 
 - Un cambio = una idea. Antes de hacerlo, explícalo en una frase sencilla.
 - Commits pequeños con un mensaje que diga **qué** y **por qué**. Si añades una dependencia, explica en el commit por qué hace falta.
 - Lo que no entra en la fase actual no se "deja preparado": se anota en `PLAN.md`.
-- Lo que no puedes verificar no se publica. Ejemplo: la lista de operadores de tours se dejó vacía, con un mensaje de "en revisión", en vez de publicar enlaces sin comprobar.
+- Lo que no puedes verificar no se publica. Ejemplo: si un dato no se puede comprobar o descargar, la página muestra un aviso en vez de una cifra inventada.
 
 ## 7.3 · Verificar antes de dar algo por hecho
 

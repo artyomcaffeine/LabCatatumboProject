@@ -16,14 +16,14 @@ npm i -D @capacitor/cli @capacitor/assets
 - `@capacitor/cli`: el comando `cap`.
 - `@capacitor/assets`: genera el icono y el splash en todos los tamaños.
 
-`capacitor.config.ts` del ejemplo:
+Un `capacitor.config.ts` mínimo:
 
 ```ts
 const config: CapacitorConfig = {
-  appId: 'com.catatumbodigital.guia',   // identificador único; NO se puede cambiar tras publicar
-  appName: 'Catatumbo',
+  appId: 'com.tuempresa.tuapp',   // identificador único; NO se puede cambiar tras publicar
+  appName: 'Mi app',
   webDir: 'dist',
-  backgroundColor: '#142d31',
+  backgroundColor: '#142d31',     // el color de fondo mientras carga la web
 };
 ```
 
@@ -39,9 +39,9 @@ Las carpetas `android/` e `ios/` se versionan en Git. La copia de `dist/` que ll
 
 ## 6.2 · La trampa de las rutas (importante)
 
-El servidor interno de Capacitor (en Android y en iOS) trata las rutas sin extensión como una SPA: si pides `/es/relampago/`, **devuelve el `index.html` de la raíz**. Con un sitio de varias páginas eso es un desastre: cada enlace abre la raíz, y nuestra raíz redirige a `/es/`… que vuelve a ser la raíz. La app se queda en un bucle.
+El servidor interno de Capacitor (en Android y en iOS) trata las rutas sin extensión como una SPA: si pides `/es/ejemplo/`, **devuelve el `index.html` de la raíz**. Con un sitio de varias páginas eso es un desastre: cada enlace abre la raíz, y nuestra raíz redirige a `/es/`… que vuelve a ser la raíz. La app se queda en un bucle.
 
-Lo descubrimos leyendo el código de Capacitor (`WebViewLocalServer.java` en Android, `CapacitorRouter` en iOS). La solución del ejemplo: en el build de la app, los enlaces internos apuntan al archivo, `/es/relampago/index.html`, que sí tiene extensión. En `src/lib/pages.ts`:
+Lo descubrimos leyendo el código de Capacitor (`WebViewLocalServer.java` en Android, `CapacitorRouter` en iOS). La solución del ejemplo: en el build de la app, los enlaces internos apuntan al archivo, `/es/ejemplo/index.html`, que sí tiene extensión. En `src/lib/pages.ts`:
 
 ```ts
 const app = import.meta.env.MODE === 'app';
@@ -67,6 +67,14 @@ Se usa `--mode app` y no una variable de entorno porque así el script funciona 
 ## 6.3 · Enlaces externos
 
 Capacitor abre los enlaces a otras webs en el navegador del sistema, en Android y en iOS, sin plugins. Por eso el ejemplo no instala `@capacitor/browser`. Antes de añadir un plugin, comprueba si Capacitor ya lo hace.
+
+Cuando sí hace falta uno (en el ejemplo, `@capacitor/geolocation`, para pedir la ubicación con el permiso nativo del teléfono):
+
+1. Instálalo con `npm i` y ejecuta `npm run app:build`: `cap sync` lo registra en `android/` e `ios/`. Versiona esos cambios.
+2. Declara sus permisos: en `android/app/src/main/AndroidManifest.xml` (pide el mínimo; por ejemplo, ubicación aproximada) y los textos `NS…UsageDescription` en `ios/App/App/Info.plist`, que el teléfono muestra al pedir el permiso.
+3. Pide el permiso solo cuando el usuario lo necesita (al pulsar un botón), no al abrir la app, y ten preparado el mensaje para cuando lo deniega.
+
+En la web, el mismo plugin usa la API del navegador, así que el código es uno solo.
 
 ## 6.4 · Icono y pantalla de inicio
 

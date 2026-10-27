@@ -20,10 +20,11 @@ Para que la app funcione sin conexión, cada página tiene que poder dibujarse s
 
 - **Fuentes:** los `.woff2` están en `src/assets/fonts/` y se declaran en `tokens.css`. Nunca enlaces Google Fonts ni otra CDN.
 - **Imágenes:** en `src/assets/img/`, mostradas con `<Image>` o `<Picture>` de `astro:assets`, que genera tamaños y formatos (webp, avif). Lo que no necesita optimizarse (iconos, banderas SVG) va en `public/` y se enlaza con `asset()`.
-- **Sin embeds:** ni mapas, ni vídeos de YouTube, ni widgets. Un enlace a otra web (un crédito, una fuente) sí vale.
-- **Créditos visibles:** las fotos del ejemplo son CC BY-SA 2.0. Su crédito aparece bajo cada foto y en el pie, también en la app.
+- **Sin embeds:** ni mapas, ni vídeos de YouTube, ni widgets de otras webs. Un enlace a otra web (un crédito, una fuente) sí vale.
+- **Datos en vivo, sin bloquear:** si un componente propio necesita un dato de internet (por ejemplo, de una API pública), lo pide con `fetch` al abrir la página, guarda el último en `localStorage` con su fecha y, sin conexión, muestra ese con un aviso. El resto de la página no depende de él. Con licencias que exigen atribución, el crédito de la fuente se ve junto al dato.
+- **Créditos visibles:** si usas fotos con una licencia que exige atribución (por ejemplo, CC BY-SA), su crédito tiene que verse bajo cada foto, también en la app.
 
-Cómo comprobarlo: `npm run build && npm run preview`, abre las herramientas del navegador, pestaña **Red** (Network), y recorre las páginas. Todas las peticiones tienen que ir a `localhost`; cualquier otro dominio es algo que fallará sin conexión.
+Cómo comprobarlo: `npm run build && npm run preview`, abre las herramientas del navegador, pestaña **Red** (Network), y recorre las páginas. Todas las peticiones tienen que ir a `localhost`; cualquier otro dominio es algo que fallará sin conexión. La única excepción son los `fetch` de datos en vivo descritos arriba: corta la red (modo sin conexión de la pestaña Red) y comprueba que la página se sigue viendo entera.
 
 ## 4.3 · Pantallas con muesca
 
@@ -33,7 +34,7 @@ En el móvil, la app ocupa toda la pantalla, también bajo la hora y la batería
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 ```
 
-y en `site.css` la barra superior y el pie suman el hueco del sistema:
+y en `site.css` la barra superior y el pie suman el hueco del sistema (y, en horizontal, los lados del `body`):
 
 ```css
 .ct-topbar { height: calc(var(--topbar-height) + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
