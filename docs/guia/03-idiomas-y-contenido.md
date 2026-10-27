@@ -81,6 +81,8 @@ export const asset = (path: string) => import.meta.env.BASE_URL.replace(/\/?$/, 
 
 `getRelativeLocaleUrl` añade la ruta base y el prefijo del idioma. `toFile` es el ajuste para la app (capítulo 6). `alternates` alimenta el selector de idioma de `Topbar.astro` y los `<link rel="alternate" hreflang>` de `Base.astro`.
 
+El selector es un desplegable nativo, `<details>` con `<summary>`: muestra el código del idioma actual y, al pulsarlo, la lista de todos los idiomas de `LANGS`. Así un idioma nuevo aparece solo, sin tocar el selector, y el desplegable se abre también sin JavaScript. El script de `Topbar.astro` solo lo cierra al pulsar fuera o con Escape.
+
 **Regla:** nunca escribas `href="/es/visitar/"`. Usa `pageUrl(page)`, `urlOf('visit', lang)` o `homeUrl(lang)`. Los archivos de `public/` se enlazan con `asset('img/…')`.
 
 ## 3.5 · Los textos de la interfaz, tipados
