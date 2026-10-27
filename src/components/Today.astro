@@ -3,9 +3,9 @@
    - El pronóstico de esta noche y de las 6 siguientes en Congo Mirador. Lo pide el navegador a Open-Meteo al abrir la página
      y guarda el último en localStorage (ct.forecast): sin conexión se ve ese, con su fecha.
    - Un mapa (MapLibre GL, código abierto) con los lugares de la excursión y, si lo pides, tu posición precisa y la
-     distancia hasta cada lugar. Se dibuja con los colores del mapa del sistema de diseño (--map-*), sobre los datos de
-     OpenFreeMap (OpenStreetMap). Sin conexión se ve un contorno simplificado del lago y la costa que va dentro del sitio
-     (src/assets/map/lago.json, de Natural Earth). MapLibre pesa: se carga solo cuando el mapa entra en pantalla.
+     distancia hasta cada lugar. Usa Liberty, el estilo por defecto de OpenFreeMap (OpenStreetMap). Sin conexión se ve
+     un contorno simplificado del lago y la costa que va dentro del sitio (src/assets/map/lago.json, de Natural Earth),
+     en los colores de Liberty. MapLibre pesa: se carga solo cuando el mapa entra en pantalla.
      La ubicación solo se pide al pulsar el botón y no se guarda ni se envía. En la app la pide @capacitor/geolocation
      (con los permisos nativos); en la web, el mismo plugin usa la del navegador.
    Sin JavaScript solo se ve un aviso. */
@@ -211,39 +211,23 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
     let offline = false;
     const say = (message: string) => { note.textContent = [message, offline ? t['today.mapOffline'] : ''].filter(Boolean).join(' '); };
 
-    /* El estilo del mapa: los colores salen de los tokens del sistema de diseño. Debajo, el contorno de lago.json
-       (se ve sin conexión y se oculta en cuanto llegan los datos de OpenFreeMap). Los nombres de ciudades necesitan
-       las fuentes de OpenFreeMap: sin conexión no salen, y los lugares de la guía son marcadores HTML con las fuentes del sitio. */
-    function mapStyle(): StyleSpecification {
-      const css = getComputedStyle(document.documentElement);
-      const c = (name: string) => css.getPropertyValue(name).trim();
+    /* El estilo del mapa: Liberty, el estilo por defecto de OpenFreeMap, que se descarga al abrir el mapa. Si no se
+       puede descargar (sin conexión), un estilo mínimo con el contorno de lago.json, en los colores de Liberty. */
+    async function mapStyle(): Promise<StyleSpecification> {
+      try {
+        const res = await fetch('https://tiles.openfreemap.org/styles/liberty', { signal: AbortSignal.timeout(10000) });
+        if (res.ok) return await res.json();
+      } catch {}
+      offline = true;
       const kind = (k: string) => ['==', ['get', 'kind'], k] as ['==', ['get', string], string];
       return {
         version: 8,
-        glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
-        sources: {
-          region: { type: 'geojson', data: region as GeoJSONSourceSpecification['data'], attribution: 'Natural Earth' },
-          omt: {
-            type: 'vector', url: 'https://tiles.openfreemap.org/planet',
-            attribution: '<a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a> · <a href="https://www.openmaptiles.org/" target="_blank" rel="noreferrer">© OpenMapTiles</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap</a>',
-          },
-          accuracy: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-        },
+        sources: { region: { type: 'geojson', data: region as GeoJSONSourceSpecification['data'], attribution: 'Natural Earth' } },
         layers: [
-          { id: 'land', type: 'background', paint: { 'background-color': c('--map-land') } },
-          { id: 'region-water', type: 'fill', source: 'region', filter: kind('water'), paint: { 'fill-color': c('--map-water') } },
-          { id: 'region-river', type: 'line', source: 'region', filter: kind('river'), paint: { 'line-color': c('--map-river'), 'line-width': 1.2 } },
-          { id: 'region-border', type: 'line', source: 'region', filter: kind('border'), paint: { 'line-color': c('--map-land-edge'), 'line-width': 1, 'line-dasharray': [3, 2] } },
-          { id: 'wetland', type: 'fill', source: 'omt', 'source-layer': 'landcover', filter: ['==', ['get', 'class'], 'wetland'], paint: { 'fill-color': c('--map-wetland'), 'fill-outline-color': c('--map-wetland-edge') } },
-          { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': c('--map-water') } },
-          { id: 'river', type: 'line', source: 'omt', 'source-layer': 'waterway', paint: { 'line-color': c('--map-river'), 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 13, 2.5] } },
-          { id: 'road', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: ['in', ['get', 'class'], ['literal', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary']]], paint: { 'line-color': c('--map-land-edge'), 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.4, 14, 2] } },
-          { id: 'border', type: 'line', source: 'omt', 'source-layer': 'boundary', filter: ['==', ['get', 'admin_level'], 2], paint: { 'line-color': c('--map-land-edge'), 'line-width': 1, 'line-dasharray': [3, 2] } },
-          { id: 'town', type: 'symbol', source: 'omt', 'source-layer': 'place',
-            filter: ['all', ['in', ['get', 'class'], ['literal', ['city', 'town', 'village']]], ['!', ['in', ['get', 'name'], ['literal', places.map((p) => p.name)]]]],
-            layout: { 'text-field': ['coalesce', ['get', `name:${lang}`], ['get', 'name']], 'text-font': ['Noto Sans Regular'], 'text-size': 10, 'text-transform': 'uppercase', 'text-letter-spacing': 0.08 },
-            paint: { 'text-color': c('--map-water-label'), 'text-halo-color': c('--map-land'), 'text-halo-width': 1.2 } },
-          { id: 'accuracy', type: 'fill', source: 'accuracy', paint: { 'fill-color': c('--map-user'), 'fill-opacity': 0.12, 'fill-outline-color': c('--map-user') } },
+          { id: 'background', type: 'background', paint: { 'background-color': '#f8f4f0' } },
+          { id: 'water', type: 'fill', source: 'region', filter: kind('water'), paint: { 'fill-color': 'rgb(158,189,255)' } },
+          { id: 'river', type: 'line', source: 'region', filter: kind('river'), paint: { 'line-color': '#a0c8f0', 'line-width': 1.2 } },
+          { id: 'border', type: 'line', source: 'region', filter: kind('border'), paint: { 'line-color': 'hsl(248,1%,41%)', 'line-width': 1, 'line-dasharray': [3, 2] } },
         ],
       };
     }
@@ -254,10 +238,11 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
       try {
         maplibre = await import('maplibre-gl');
         maplibre.setWorkerUrl(workerUrl);
+        const style = await mapStyle();
         canvas.textContent = '';
         map = new maplibre.Map({
           container: canvas,
-          style: mapStyle(),
+          style,
           bounds: places.reduce((b, p) => b.extend([p.lon, p.lat]), new maplibre.LngLatBounds([places[0].lon, places[0].lat], [places[0].lon, places[0].lat])),
           fitBoundsOptions: { padding: 60, maxZoom: 9.5 },
           attributionControl: { compact: true },
@@ -279,20 +264,13 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
       map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right');
       map.touchZoomRotate.disableRotation();
 
-      /* Datos de OpenFreeMap: al llegar, se oculta el contorno de respaldo; si fallan, se avisa de que no hay conexión. */
-      const fallback = ['region-water', 'region-river', 'region-border'];
-      map.on('data', (e) => {
-        if (e.dataType === 'source' && 'sourceId' in e && e.sourceId === 'omt' && (e as { tile?: unknown }).tile) {
-          fallback.forEach((id) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', 'none'));
-          if (offline) { offline = false; say(note.dataset.last ?? privacy); }
-        }
-      });
-      map.on('error', (e) => {
-        if ((e as { sourceId?: string }).sourceId === 'omt' && !offline) {
-          offline = true;
-          fallback.forEach((id) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', 'visible'));
-          say(note.dataset.last ?? privacy);
-        }
+      if (offline) say(privacy);
+
+      /* El círculo de precisión de tu posición, encima del estilo (Liberty o el de respaldo), en el color del punto. */
+      map.on('load', () => {
+        map.addSource('accuracy', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+        const red = getComputedStyle(document.documentElement).getPropertyValue('--map-user').trim();
+        map.addLayer({ id: 'accuracy', type: 'fill', source: 'accuracy', paint: { 'fill-color': red, 'fill-opacity': 0.12, 'fill-outline-color': red } });
       });
 
       /* La leyenda: cada lugar centra el mapa en él y, si el mapa no se ve entero (en el teléfono la leyenda va
@@ -311,7 +289,8 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
         const pin = document.createElement('div');
         pin.className = 'map-pin';
         pin.innerHTML = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle class="ct-map-dot-ring" cx="11" cy="11" r="10"/><circle class="ct-map-dot" cx="11" cy="11" r="5"/></svg><span class="map-pin-label"></span>';
-        pin.querySelector('.map-pin-label')!.textContent = `${p.number} ${p.name}`;
+        /* Liberty ya escribe los nombres de los pueblos: el marcador lleva solo el número. Sin conexión, también el nombre. */
+        pin.querySelector('.map-pin-label')!.textContent = offline ? `${p.number} ${p.name}` : p.number;
         new maplibre.Marker({ element: pin, anchor: 'left', offset: [-11, 0] }).setLngLat([p.lon, p.lat]).addTo(map);
       }
 
