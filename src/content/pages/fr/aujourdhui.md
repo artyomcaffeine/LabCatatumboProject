@@ -1,7 +1,7 @@
 ---
 key: today
 title: Aujourd’hui sur le lac
-description: Les prévisions pour cette nuit et la semaine à venir au Catatumbo, et à quelle distance vous êtes.
+description: Les prévisions pour cette nuit et la semaine à venir au Catatumbo, et une carte avec les lieux et votre position.
 order: 6
 draft_translation: true
 ---
@@ -23,6 +23,6 @@ La page garde sur votre téléphone les dernières prévisions téléchargées. 
 
 Du service gratuit [Open-Meteo](https://open-meteo.com/), qui combine des modèles météo nationaux, pour un point fixe à Congo Mirador. La page n’envoie pas votre position.
 
-### La distance
+### La carte
 
-Elle est calculée à vol d’oiseau (pas par la route ni par le fleuve), à partir de votre position approximative, sur votre téléphone et sans internet. Les coordonnées des lieux viennent d’OpenStreetMap.
+La carte utilise les données d’[OpenFreeMap](https://openfreemap.org/), basées sur OpenStreetMap. Si vous touchez « Afficher ma position », votre position apparaît sur la carte avec sa précision, et la légende indique la distance à vol d’oiseau (pas par la route ni par le fleuve) jusqu’à chaque lieu. Votre position est utilisée seulement sur votre téléphone. Hors connexion, la carte montre un contour simplifié du lac et de la côte, et votre position fonctionne toujours. Les coordonnées des lieux viennent d’OpenStreetMap.

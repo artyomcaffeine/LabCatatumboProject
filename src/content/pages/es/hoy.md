@@ -1,7 +1,7 @@
 ---
 key: today
 title: Hoy en el lago
-description: El pronóstico de esta noche y de la próxima semana en el Catatumbo, y a qué distancia estás.
+description: El pronóstico de esta noche y de la próxima semana en el Catatumbo, y un mapa con los lugares y tu posición.
 order: 6
 ---
 
@@ -22,6 +22,6 @@ La página guarda en tu teléfono el último pronóstico que descargó. Sin inte
 
 Del servicio gratuito [Open-Meteo](https://open-meteo.com/), que combina modelos meteorológicos nacionales, para un punto fijo en Congo Mirador. La página no envía tu ubicación.
 
-### La distancia
+### El mapa
 
-Se calcula en línea recta (no por carretera ni por el río) con tu ubicación aproximada, en tu teléfono y sin internet. Las coordenadas de los lugares vienen de OpenStreetMap.
+El mapa usa datos de [OpenFreeMap](https://openfreemap.org/), basados en OpenStreetMap. Si pulsas "Mostrar mi ubicación", tu posición aparece en el mapa con su precisión, y la leyenda dice a qué distancia en línea recta (no por carretera ni por el río) está cada lugar. Tu ubicación se usa solo en tu teléfono. Sin conexión, el mapa muestra un contorno simplificado del lago y la costa, y tu posición sigue funcionando. Las coordenadas de los lugares vienen de OpenStreetMap.

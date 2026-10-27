@@ -6,7 +6,7 @@ order: 99
 menu: false
 ---
 
-*Last updated: 26 October 2026.*
+*Last updated: 27 October 2026.*
 
 ## We don't collect personal data.
 
@@ -33,7 +33,11 @@ When you open "Today on the lake", your device asks [Open-Meteo](https://open-me
 
 ### Your location
 
-It is only requested if you tap "Calculate distance" on "Today on the lake", and your phone or browser asks for your permission first. An approximate location is used, on your device, to work out the distance to the lake. It is not stored and not sent to anyone, including us.
+It is only requested if you tap "Show my location" on "Today on the lake", and your phone or browser asks for your permission first. Your precise location is used, on your device, to show you on the map and work out the distance to the places of the trip. It updates while the page is open and stops being used when you leave. It is not stored and not sent to anyone, including us.
+
+### The map
+
+The map downloads its data from [OpenFreeMap](https://openfreemap.org/), based on OpenStreetMap, for the area shown on screen. Like any server, OpenFreeMap receives your connection's IP address and, from the parts of the map your device requests, the area you are looking at. If the map is centred on you, that shows roughly where you are. Offline, a simplified map inside the guide is used, without requesting anything from the internet.
 
 ### Links to other sites
 

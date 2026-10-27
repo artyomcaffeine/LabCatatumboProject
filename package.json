@@ -21,7 +21,8 @@
     "@capacitor/core": "^8.5.3",
     "@capacitor/geolocation": "^8.2.4",
     "@capacitor/ios": "^8.5.3",
-    "astro": "^7.4.0"
+    "astro": "^7.4.0",
+    "maplibre-gl": "^6.16.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.11",

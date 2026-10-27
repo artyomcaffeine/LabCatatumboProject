@@ -21,6 +21,7 @@ Para que la app funcione sin conexión, cada página tiene que poder dibujarse s
 - **Fuentes:** los `.woff2` están en `src/assets/fonts/` y se declaran en `tokens.css`. Nunca enlaces Google Fonts ni otra CDN.
 - **Imágenes:** en `src/assets/img/`, mostradas con `<Image>` o `<Picture>` de `astro:assets`, que genera tamaños y formatos (webp, avif). Lo que no necesita optimizarse (iconos, banderas SVG) va en `public/` y se enlaza con `asset()`.
 - **Sin embeds:** ni mapas, ni vídeos de YouTube, ni widgets de otras webs. Un enlace a otra web (un crédito, una fuente) sí vale.
+- **Mapas:** un mapa interactivo se dibuja con una librería de código abierto instalada con npm (en el ejemplo, MapLibre GL), no con un iframe. Sus datos llegan de internet, así que lleva un plan B que va dentro del sitio (un contorno simplificado en GeoJSON) y se carga solo cuando el mapa entra en pantalla, porque la librería pesa. Los colores salen de los tokens del sistema de diseño (`getComputedStyle`), no de un estilo ajeno.
 - **Datos en vivo, sin bloquear:** si un componente propio necesita un dato de internet (por ejemplo, de una API pública), lo pide con `fetch` al abrir la página, guarda el último en `localStorage` con su fecha y, sin conexión, muestra ese con un aviso. El resto de la página no depende de él. Con licencias que exigen atribución, el crédito de la fuente se ve junto al dato.
 - **Créditos visibles:** si usas fotos con una licencia que exige atribución (por ejemplo, CC BY-SA), su crédito tiene que verse bajo cada foto, también en la app.
 

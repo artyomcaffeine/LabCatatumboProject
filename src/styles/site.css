@@ -114,10 +114,25 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .today .storm-high .display-figure, .nights .storm-high { color: var(--rust); }
 .today .storm-low .display-figure { color: var(--text-muted); }
 .today-offline { margin: 0 0 16px; }
-.today .places dt small { display: block; margin-top: 4px; font-size: 9px; color: var(--text-meta); }
-.today .places { grid-template-columns: 1fr; }
-.today .locate-status { margin: 12px 0 0; }
-.today .locate-status:empty { display: none; }
+/* El mapa: MapLibre dentro del .ct-map del sistema de diseño, con su barra de controles y su leyenda. Los marcadores usan
+   las clases SVG del sistema (ct-map-dot, ct-map-user); los controles de MapLibre toman los colores y fuentes del sitio. */
+.today-map-canvas { height: clamp(320px, 38vw, 460px); font: inherit; }
+.today-map-canvas > p { margin: 0; padding: 20px; color: var(--text-muted); }
+.today-map .ct-legend { grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
+.today-map .ct-legend ol { grid-template-columns: 1fr; }
+.today-map .ct-legend p { margin: 0; }
+.today-map .ct-legend small { display: block; margin-top: 3px; font: 10px var(--font-mono); color: var(--text-meta); }
+.today-map .ct-legend small:empty { display: none; }
+.map-pin { display: flex; align-items: center; gap: 4px; pointer-events: none; }
+/* .ct-map svg (del sistema de diseño) estira los SVG a todo el ancho: los de los marcadores tienen su propio tamaño. */
+.today-map .ct-map .map-pin svg { width: 22px; height: 22px; min-height: 0; overflow: visible; }
+.today-map .ct-map .map-user svg { width: 34px; height: 34px; min-height: 0; overflow: visible; }
+.map-pin-label { font: 10px var(--font-mono); letter-spacing: .04em; color: var(--map-label); white-space: nowrap;
+  text-shadow: 0 0 2px var(--map-land), 0 0 2px var(--map-land), 0 0 3px var(--map-land); }
+.today-map .maplibregl-ctrl-group { background: var(--surface); border: var(--border-hairline) solid var(--rule); box-shadow: none; }
+.today-map .maplibregl-ctrl-attrib { font: 9px/1.5 var(--font-mono); background: color-mix(in srgb, var(--map-controls) 88%, transparent); color: var(--map-controls-text); }
+.today-map .maplibregl-ctrl-attrib a { color: var(--map-controls-text); }
+.today-map .maplibregl-cooperative-gesture-screen { font: 14px var(--font-sans); background: color-mix(in srgb, var(--deep) 70%, transparent); }
 .nights-title { margin: 56px 0 16px; color: var(--text); }
 .nights-title:has(+ .nights:empty) { display: none; }
 .nights { list-style: none; margin: 0; padding: 0; border-top: var(--border-hairline) solid var(--rule); }

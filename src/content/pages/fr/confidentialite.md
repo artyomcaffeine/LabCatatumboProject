@@ -7,7 +7,7 @@ menu: false
 draft_translation: true
 ---
 
-*Dernière mise à jour : 26 octobre 2026.*
+*Dernière mise à jour : 27 octobre 2026.*
 
 ## Nous ne collectons pas de données personnelles.
 
@@ -34,7 +34,11 @@ Quand vous ouvrez « Aujourd’hui sur le lac », votre appareil demande à [O
 
 ### Votre position
 
-Elle n'est demandée que si vous touchez « Calculer la distance » sur « Aujourd’hui sur le lac », et votre téléphone ou votre navigateur vous demande d'abord l'autorisation. Une position approximative est utilisée, sur votre appareil, pour calculer la distance jusqu'au lac. Elle n'est ni enregistrée ni envoyée à personne, pas même à nous.
+Elle n'est demandée que si vous touchez « Afficher ma position » sur « Aujourd’hui sur le lac », et votre téléphone ou votre navigateur vous demande d'abord l'autorisation. Votre position précise est utilisée, sur votre appareil, pour vous montrer sur la carte et calculer la distance jusqu'aux lieux de l'excursion. Elle se met à jour tant que la page est ouverte et n'est plus utilisée quand vous la quittez. Elle n'est ni enregistrée ni envoyée à personne, pas même à nous.
+
+### La carte
+
+La carte télécharge ses données depuis [OpenFreeMap](https://openfreemap.org/), basé sur OpenStreetMap, pour la zone affichée à l'écran. Comme tout serveur, OpenFreeMap reçoit l'adresse IP de votre connexion et, d'après les parties de la carte demandées par votre appareil, la zone que vous regardez. Si la carte est centrée sur vous, cela indique approximativement où vous êtes. Hors connexion, une carte simplifiée incluse dans le guide est utilisée, sans rien demander à internet.
 
 ### Liens vers d'autres sites
 

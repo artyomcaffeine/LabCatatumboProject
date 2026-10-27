@@ -1,7 +1,7 @@
 ---
 key: today
 title: Heute am See
-description: Die Vorhersage für heute Nacht und die kommende Woche am Catatumbo, und wie weit du entfernt bist.
+description: Die Vorhersage für heute Nacht und die kommende Woche am Catatumbo, und eine Karte mit den Orten und deiner Position.
 order: 6
 draft_translation: true
 ---
@@ -23,6 +23,6 @@ Die Seite speichert die zuletzt geladene Vorhersage auf deinem Handy. Ohne Inter
 
 Vom kostenlosen Dienst [Open-Meteo](https://open-meteo.com/), der nationale Wettermodelle kombiniert, für einen festen Punkt in Congo Mirador. Die Seite sendet deinen Standort nicht.
 
-### Die Entfernung
+### Die Karte
 
-Sie wird in Luftlinie berechnet (nicht über Straße oder Fluss), aus deinem ungefähren Standort, auf deinem Handy und ohne Internet. Die Koordinaten der Orte stammen von OpenStreetMap.
+Die Karte nutzt Daten von [OpenFreeMap](https://openfreemap.org/), basierend auf OpenStreetMap. Wenn du auf „Meinen Standort zeigen“ tippst, erscheint deine Position mit ihrer Genauigkeit auf der Karte, und die Legende zeigt die Entfernung in Luftlinie (nicht über Straße oder Fluss) zu jedem Ort. Dein Standort wird nur auf deinem Handy verwendet. Offline zeigt die Karte einen vereinfachten Umriss von See und Küste, und deine Position funktioniert weiter. Die Koordinaten der Orte stammen von OpenStreetMap.

@@ -6,7 +6,7 @@ order: 99
 menu: false
 ---
 
-*Última actualización: 26 de octubre de 2026.*
+*Última actualización: 27 de octubre de 2026.*
 
 ## No recogemos datos personales.
 
@@ -33,7 +33,11 @@ Al abrir "Hoy en el lago", tu dispositivo pide el pronóstico a [Open-Meteo](htt
 
 ### Tu ubicación
 
-Solo se pide si pulsas "Calcular distancia" en "Hoy en el lago", y el teléfono o el navegador te piden permiso antes. Se usa una ubicación aproximada, en tu dispositivo, para calcular la distancia hasta el lago. No se guarda y no se envía a nadie, tampoco a nosotros.
+Solo se pide si pulsas "Mostrar mi ubicación" en "Hoy en el lago", y el teléfono o el navegador te piden permiso antes. Se usa tu ubicación precisa, en tu dispositivo, para mostrarte en el mapa y calcular la distancia hasta los lugares de la excursión. Mientras la página está abierta se actualiza; al salir, se deja de usar. No se guarda y no se envía a nadie, tampoco a nosotros.
+
+### El mapa
+
+El mapa descarga sus datos de [OpenFreeMap](https://openfreemap.org/), basado en OpenStreetMap, según la zona que se ve en pantalla. Como cualquier servidor, OpenFreeMap recibe la dirección IP de tu conexión y, por las partes del mapa que pide tu dispositivo, la zona que estás mirando. Si el mapa está centrado en ti, eso indica de forma aproximada dónde estás. Sin conexión se usa un mapa simplificado que va dentro de la guía, sin pedir nada a internet.
 
 ### Enlaces a otros sitios
 
