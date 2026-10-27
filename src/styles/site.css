@@ -22,14 +22,17 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .ct-menu-button.is-open .i-x { display: inline; }
 .ct-menu-button.is-open .i-menu { display: none; }
 
-/* Selector de idioma: un código por idioma; los demás enlazan a la misma página en ese idioma. */
-.lang-switch { display: flex; align-items: center; }
-.ct-language { text-decoration: none; }
-.lang-switch .ct-language { padding: 10px 5px; cursor: default; }
-.lang-switch a.ct-language { cursor: pointer; }
-.lang-switch a.ct-language:hover { color: var(--rust); }
-.lang-switch span.ct-language { color: var(--rust); }
-.lang-sep { font: 10px var(--font-mono); opacity: .5; }
+/* Selector de idioma: el código del idioma actual abre una lista con todos los idiomas, debajo y alineada a la derecha. */
+.lang-menu { position: relative; }
+.lang-menu summary { display: flex; align-items: center; gap: 6px; padding: 10px 0 10px 7px; list-style: none; }
+.lang-menu summary::-webkit-details-marker { display: none; }
+.lang-menu summary:hover, .lang-menu[open] summary { color: var(--rust); }
+.lang-menu[open] summary svg { transform: rotate(180deg); }
+.lang-menu ul { position: absolute; top: 100%; right: 0; z-index: 1001; min-width: 170px; max-height: 70vh; overflow-y: auto; margin: 6px 0 0; padding: 6px 0; list-style: none; background: var(--surface); border: var(--border-hairline) solid var(--rule); box-shadow: 0 10px 24px rgba(10, 25, 31, .14); }
+.lang-menu a { display: flex; justify-content: space-between; gap: 18px; padding: 11px 16px; color: var(--text); text-decoration: none; }
+.lang-menu a small { color: var(--text-meta); font: inherit; }
+.lang-menu a:hover, .lang-menu a:focus-visible { background: var(--surface-sunk); color: var(--rust); }
+.lang-menu a[aria-current="true"], .lang-menu a[aria-current="true"] small { color: var(--rust); }
 
 /* Notas */
 .ct-note { color: var(--text-muted); }

@@ -103,7 +103,7 @@ El cliente rellena un formulario y la solicitud le llega al operador. No es una 
   - Política de privacidad y textos de la página actualizados. En los formularios de las tiendas: la ubicación aproximada se usa solo en el dispositivo, así que no cuenta como "dato recogido" (Google: "Seguridad de los datos"; Apple: etiqueta de privacidad).
 - [ ] **Rayos del mes y del año** (climatología): bloqueado. El dato bueno es LIS VHRMC de la NASA (0,1°, mensual, 1998–2013, archivo `lis_vhrmc_1998_2013_v01.nc.gz`), pero para descargarlo hace falta una cuenta gratuita de NASA Earthdata. Con el archivo, se resume en un JSON fijo del repo (funciona sin conexión). No inventar cifras: hasta entonces no se muestra.
 - [ ] Probar en teléfonos reales: permisos, sin conexión, modo avión.
-- [ ] El menú tiene ahora 6 páginas: en alemán, entre 650 y 900 px, los enlaces ocupan dos líneas. Cabe, pero va justo; mirarlo si se añade otra página.
+- [ ] El menú tiene ahora 6 páginas: en alemán, entre 650 y 900 px, los enlaces ocupan dos líneas. Cabe (el selector de idioma desplegable dejó algo más de sitio), pero va justo; mirarlo si se añade otra página.
 
 ### Principios para todos los widgets
 
@@ -169,6 +169,7 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-26 | Habrá un formulario de solicitud que el cliente rellena y se envía al operador. | El cliente contacta con el operador sin salir de la guía. Falta elegir cómo se envía. |
 | 2026-10-26 | Política de privacidad como página Markdown fuera del menú (`menu: false`), enlazada desde el pie. | Las tiendas piden una URL pública; así sirve también dentro de la app y sin conexión. |
 | 2026-10-26 | En horizontal, todo el `body` se aparta de la muesca. | Una sola regla CSS en vez de tocar cada franja; es lo mismo que hace Safari por defecto. |
+| 2026-10-27 | Selector de idioma como desplegable (`<details>`) en vez de un botón por idioma. | Caben los idiomas que se añadan; funciona sin JavaScript y ocupa menos sitio en la barra superior. |
 | 2026-10-26 | Fase 3 empieza: "cantidad de rayos" = estimación de tormenta para la semana + climatología para mes/año. Sin conteo real. | Es la recomendación del plan: sin servidor y con datos que funcionan sin conexión. El conteo real pediría un trabajo programado y mantenimiento. Se puede revisar. |
 | 2026-10-26 | Coordenadas de referencia tomadas de OpenStreetMap. | No había otras; se confirman sobre el terreno. |
 | 2026-10-26 | El pronóstico es para un solo punto (Congo Mirador). | Una sola llamada por visita; los tres lugares están a menos de 45 km y el modelo no los distingue bien. |
