@@ -153,7 +153,9 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 @media (max-width: 650px) {
   html { scroll-padding-top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
   .ct-topbar { height: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
-  .ct-nav { top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); }
+  /* El menú cuelga de la barra superior, que no se mueve: en horizontal (pantalla baja) no cabe entero.
+     Se limita al alto que queda bajo la barra y se desplaza por dentro, sin mover la página de detrás. */
+  .ct-nav { top: calc(var(--topbar-height-sm) + env(safe-area-inset-top, 0px)); max-height: calc(100dvh - var(--topbar-height-sm) - env(safe-area-inset-top, 0px)); overflow-y: auto; overscroll-behavior: contain; }
   .ct-nav a { text-align: center; }
   .ct-footer { padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .ct-flag { display: none; }
