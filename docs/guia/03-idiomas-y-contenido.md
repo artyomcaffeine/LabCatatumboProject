@@ -18,7 +18,7 @@ i18n: {
 
 ## 3.2 · El contenido: una colección con esquema
 
-El contenido vive en `src/content/pages/<idioma>/`, un archivo por página e idioma. El nombre del archivo es la URL: `es/relampago.md` → `/es/relampago/`.
+El contenido vive en `src/content/pages/<idioma>/`, un archivo por página e idioma. El nombre del archivo es la URL: `es/ejemplo.md` → `/es/ejemplo/`.
 
 El esquema (`src/content.config.ts`) dice qué campos lleva cada archivo:
 
@@ -26,10 +26,11 @@ El esquema (`src/content.config.ts`) dice qué campos lleva cada archivo:
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: ({ image }) => z.object({
-    key: z.enum(['lightning', 'visit', 'tours', 'places', 'history']),
+    key: z.enum(['example', 'privacy' /* , … una por página */]),
     title: z.string(),
     description: z.string(),
     order: z.number(),
+    menu: z.boolean().default(true),        // false: no sale en el menú (se enlaza a mano, p. ej. desde el pie)
     photo: image().optional(),
     photoAlt: z.string().optional(),
     draft_translation: z.boolean().optional(),
@@ -37,22 +38,22 @@ const pages = defineCollection({
 });
 ```
 
-La pieza clave es **`key`**: es igual en todos los idiomas (`es/relampago.md` y `en/lightning.md` tienen `key: lightning`). Así se sabe que son la misma página aunque la URL cambie de idioma a idioma. Que `key` sea un `z.enum` hace que un error al escribirla rompa el build en vez de crear una página huérfana.
+La pieza clave es **`key`**: es igual en todos los idiomas (`es/ejemplo.md` y `en/example.md` tienen `key: example`). Así se sabe que son la misma página aunque la URL cambie de idioma a idioma. Que `key` sea un `z.enum` hace que un error al escribirla rompa el build en vez de crear una página huérfana.
 
-Un archivo de contenido empieza así (`src/content/pages/es/visitar.md`):
+Un archivo de contenido empieza así (`src/content/pages/es/ejemplo.md`):
 
 ```markdown
 ---
-key: visit
-title: Visitar
-description: Cómo llegar, cuándo ir, qué llevar, seguridad, respeto a las comunidades y consejos de fotografía.
+key: example
+title: Ejemplo
+description: Una frase que resume la página (sale en el menú, en las tarjetas y en la meta description).
 order: 2
 ---
 
-## Date tiempo. Ve con cuidado.
+## El primer título de la página.
 ```
 
-Los datos que son iguales en todos los idiomas no se repiten en cuatro Markdown: van en un archivo de datos. Ejemplo: `src/content/tours.yaml` (colección `tours`, cargada con `file()`), que muestra `src/components/TourList.astro`.
+Los datos que son iguales en todos los idiomas no se repiten en cuatro Markdown: van en un archivo de datos. En el ejemplo hay una así: un archivo YAML en `src/content/`, cargado con el loader `file()` en `content.config.ts` y mostrado por un componente de `src/components/`.
 
 ## 3.3 · Una plantilla para todas las páginas
 
@@ -83,7 +84,7 @@ export const asset = (path: string) => import.meta.env.BASE_URL.replace(/\/?$/, 
 
 El selector es un desplegable nativo, `<details>` con `<summary>`: muestra el código del idioma actual y, al pulsarlo, la lista de todos los idiomas de `LANGS`. Así un idioma nuevo aparece solo, sin tocar el selector, y el desplegable se abre también sin JavaScript. El script de `Topbar.astro` solo lo cierra al pulsar fuera o con Escape.
 
-**Regla:** nunca escribas `href="/es/visitar/"`. Usa `pageUrl(page)`, `urlOf('visit', lang)` o `homeUrl(lang)`. Los archivos de `public/` se enlazan con `asset('img/…')`.
+**Regla:** nunca escribas `href="/es/ejemplo/"`. Usa `pageUrl(page)`, `urlOf('example', lang)` o `homeUrl(lang)`. Los archivos de `public/` se enlazan con `asset('img/…')`.
 
 ## 3.5 · Los textos de la interfaz, tipados
 
@@ -93,16 +94,16 @@ Menú, botones y portada no están en Markdown: están en `src/i18n/ui.ts`.
 export const LANGS = ['es', 'en', 'de', 'fr'] as const;
 export type Lang = (typeof LANGS)[number];
 
-const es = { 'hero.cta': 'Explorar la guía', /* … */ };
+const es = { 'nav.lang': 'Idioma', /* … */ };
 type UI = Record<keyof typeof es, string>;
-const en: UI = { 'hero.cta': 'Explore the guide', /* … */ };
+const en: UI = { 'nav.lang': 'Language', /* … */ };
 
 export function useTranslations(lang: Lang) {
   return (key: UIKey) => UI_TEXT[lang][key];
 }
 ```
 
-El español es la referencia: cada otro idioma se tipa como `UI`, así que **si falta una clave, `npm run check` falla**. En un componente: `const t = useTranslations(lang);` y luego `{t('hero.cta')}`.
+El español es la referencia: cada otro idioma se tipa como `UI`, así que **si falta una clave, `npm run check` falla**. En un componente: `const t = useTranslations(lang);` y luego `{t('nav.lang')}`.
 
 ## 3.6 · La raíz del sitio
 

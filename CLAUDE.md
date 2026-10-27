@@ -17,7 +17,7 @@ En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 - Nada de embeds de terceros esenciales (mapas, vídeos, widgets de otros sitios): la app tiene que funcionar sin internet. Los widgets propios piden datos a APIs públicas (Open-Meteo) con `fetch`, sin cargar scripts de fuera.
 - Prefiere pocos archivos. Explica cada cambio en lenguaje sencillo antes de hacerlo. Trabaja en pasos pequeños.
 - `PLAN.md` es el plan de trabajo vivo: pasos pendientes, decisiones abiertas y registro de decisiones. Actualízalo al terminar cada paso.
-- `docs/guia/` es una guía para juniors que explica el proyecto paso a paso con extractos del código. Si cambias la arquitectura, un comando o una regla, actualiza el capítulo que lo explica.
+- `docs/guia/` es una guía para juniors que explica el proyecto paso a paso con extractos del código. Si cambias la arquitectura, un comando o una regla, actualiza el capítulo que lo explica. La guía trata solo de la tecnología y el diseño: no menciona el contenido de las páginas ni la temática del sitio (usa ejemplos neutros, como `es/ejemplo.md`).
 
 ## Comandos
 

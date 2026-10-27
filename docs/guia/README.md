@@ -4,7 +4,7 @@ Esta guía enseña a construir, desde cero, un proyecto con las mismas caracter�
 
 ## Qué vas a construir
 
-Una guía turística que:
+Un sitio web que:
 
 - es un **sitio web estático** (solo archivos HTML, CSS, JS e imágenes; sin servidor),
 - está en **varios idiomas**, cada uno con su dirección (`/es/`, `/en/`, …),
@@ -41,15 +41,15 @@ capacitor.config.ts       configuración de la app
 src/
   content.config.ts       qué campos tiene cada página (esquema)
   content/pages/<lang>/   el contenido, en Markdown, un archivo por página e idioma
-  content/tours.yaml      datos compartidos por todos los idiomas
+  content/*.yaml          datos compartidos por todos los idiomas (colecciones con file())
   i18n/ui.ts              textos de la interfaz en cada idioma
   lib/pages.ts            funciones para buscar páginas y construir enlaces
   layouts/Base.astro      <head>, barra superior y pie de todas las páginas
   pages/                  las rutas: raíz, inicio de cada idioma y páginas Markdown
-  components/             piezas reutilizables (barra, pie, banner, lista de tours…)
+  components/             piezas reutilizables (barra, pie, banner, widgets…)
   styles/                 tokens.css → bundle.css → site.css
   assets/                 fuentes e imágenes que Astro optimiza
-public/                   archivos que se copian tal cual (iconos, banderas)
+public/                   archivos que se copian tal cual (iconos, SVG)
 assets/                   dibujos fuente del icono y del splash de la app
 android/, ios/            proyectos nativos generados por Capacitor
 .github/workflows/        el despliegue automático a GitHub Pages
