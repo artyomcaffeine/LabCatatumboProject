@@ -7,7 +7,7 @@ menu: false
 draft_translation: true
 ---
 
-*Zuletzt aktualisiert: 26. Oktober 2026.*
+*Zuletzt aktualisiert: 27. Oktober 2026.*
 
 ## Wir erheben keine personenbezogenen Daten.
 
@@ -34,7 +34,11 @@ Wenn du „Heute am See“ öffnest, fragt dein Gerät bei [Open-Meteo](https://
 
 ### Dein Standort
 
-Er wird nur abgefragt, wenn du auf „Heute am See“ auf „Entfernung berechnen“ tippst, und dein Handy oder Browser fragt vorher um Erlaubnis. Ein ungefährer Standort wird auf deinem Gerät verwendet, um die Entfernung zum See zu berechnen. Er wird weder gespeichert noch an jemanden gesendet, auch nicht an uns.
+Er wird nur abgefragt, wenn du auf „Heute am See“ auf „Meinen Standort zeigen“ tippst, und dein Handy oder Browser fragt vorher um Erlaubnis. Dein genauer Standort wird auf deinem Gerät verwendet, um dich auf der Karte zu zeigen und die Entfernung zu den Orten des Ausflugs zu berechnen. Solange die Seite offen ist, wird er aktualisiert; wenn du sie verlässt, nicht mehr. Er wird weder gespeichert noch an jemanden gesendet, auch nicht an uns.
+
+### Die Karte
+
+Die Karte lädt ihre Daten von [OpenFreeMap](https://openfreemap.org/), basierend auf OpenStreetMap, für den Bereich, der auf dem Bildschirm zu sehen ist. Wie jeder Server erhält OpenFreeMap die IP-Adresse deiner Verbindung und, aus den Kartenteilen, die dein Gerät anfordert, den Bereich, den du ansiehst. Ist die Karte auf dich zentriert, zeigt das ungefähr, wo du bist. Offline wird eine vereinfachte Karte verwendet, die im Führer enthalten ist und nichts aus dem Internet abruft.
 
 ### Links zu anderen Websites
 

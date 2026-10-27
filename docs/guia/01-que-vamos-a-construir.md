@@ -24,7 +24,7 @@ Un solo código que produce una carpeta de archivos estáticos (`dist/`). Esa ca
 
 ## Lo que este proyecto decidió no hacer (todavía)
 
-Base de datos, cuentas de usuario, mapas o notificaciones. No es que estén mal: cada una añade servidor, coste o permisos. El proyecto avanza por fases y estas quedan para más adelante (ver `PLAN.md`). Aprende a decir "esto no entra en esta fase" y a anotarlo en el plan.
+Base de datos, cuentas de usuario o notificaciones. No es que estén mal: cada una añade servidor, coste o permisos. El proyecto avanza por fases y estas quedan para más adelante (ver `PLAN.md`). Aprende a decir "esto no entra en esta fase" y a anotarlo en el plan.
 
 ## Las tres reglas que lo sostienen todo
 
