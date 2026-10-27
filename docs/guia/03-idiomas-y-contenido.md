@@ -45,7 +45,7 @@ Un archivo de contenido empieza así (`src/content/pages/es/visitar.md`):
 ---
 key: visit
 title: Visitar
-description: Cómo llegar, cuándo ir, qué llevar, seguridad, respeto a las comunidades y consejos de fotografía.
+description: Cómo llegar, cuándo ir, qué llevar, seguridad y respeto a las comunidades.
 order: 2
 ---
 
