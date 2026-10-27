@@ -8,11 +8,13 @@ import { z } from 'astro/zod';
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: ({ image }) => z.object({
-    key: z.enum(['lightning', 'visit', 'tours', 'places', 'history']),
+    key: z.enum(['lightning', 'visit', 'tours', 'places', 'history', 'today', 'privacy']),
     title: z.string(),
     description: z.string(),
     /* Posición en el menú y en la página de inicio. */
     order: z.number(),
+    /* false: la página no sale en el menú ni en la portada, solo se enlaza a mano (la de privacidad, desde el pie). */
+    menu: z.boolean().default(true),
     /* Foto opcional que se muestra bajo el banner de la página. */
     photo: image().optional(),
     photoAlt: z.string().optional(),

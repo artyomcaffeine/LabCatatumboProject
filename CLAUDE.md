@@ -11,9 +11,10 @@ En esta fase el mismo sitio se empaqueta además como app para Android e iOS.
 - Idiomas: es, en, de, fr, con el enrutado i18n que trae Astro. Cada idioma tiene su prefijo (`/es/`, `/en/`, …).
 - El contenido está en Markdown, en `src/content/pages/<lang>/`.
 - **Entra en esta fase:** empaquetar la app para Android e iOS; que la app funcione sin internet, con todo el contenido, las fuentes y las imágenes dentro de la app (la web no necesita service worker); iconos, pantalla de inicio (splash) y preparación para las tiendas.
-- **No entra (fases futuras, no las prepares):** base de datos, CMS, cuentas/login, reservas, clima, GPS, mapas, notificaciones.
+- **También entra (Fase 3 de `PLAN.md`):** widgets de tiempo, de ubicación y de rayos, en la página "Hoy en el lago" (`key: today`). Cada widget pide sus datos desde el navegador al abrir la página, guarda el último dato con su fecha y, sin conexión, lo muestra con esa fecha. Nunca bloquean el resto de la guía. La ubicación se usa solo en el teléfono: ni se guarda ni se envía.
+- **No entra (fases futuras, no las prepares):** base de datos, CMS, cuentas/login, reservas, mapas, notificaciones.
 - Dependencias: se pueden añadir las que hagan falta, incluidos frameworks de UI. Explica en el cambio por qué se añade cada una.
-- Nada de embeds de terceros esenciales (mapas, vídeos, widgets): la app tiene que funcionar sin internet.
+- Nada de embeds de terceros esenciales (mapas, vídeos, widgets de otros sitios): la app tiene que funcionar sin internet. Los widgets propios piden datos a APIs públicas (Open-Meteo) con `fetch`, sin cargar scripts de fuera.
 - Prefiere pocos archivos. Explica cada cambio en lenguaje sencillo antes de hacerlo. Trabaja en pasos pequeños.
 - `PLAN.md` es el plan de trabajo vivo: pasos pendientes, decisiones abiertas y registro de decisiones. Actualízalo al terminar cada paso.
 - `docs/guia/` es una guía para juniors que explica el proyecto paso a paso con extractos del código. Si cambias la arquitectura, un comando o una regla, actualiza el capítulo que lo explica.
@@ -43,17 +44,18 @@ No hay tests. Para verificar: `npm run check` y un build. Mira el resultado en u
 - La raíz (`src/pages/index.astro`) redirige con JavaScript al idioma guardado en `localStorage` (`ct.lang`) o, si no hay, al del teléfono.
 - Los enlaces externos (créditos de las fotos, fuentes) se abren en el navegador del sistema: Capacitor lo hace solo, en Android y en iOS, sin plugins.
 - Las fotos son CC BY-SA 2.0: su crédito tiene que seguir visible en la app.
-- `viewport-fit=cover`: la página llega bajo la barra de estado y la barra de gestos del teléfono. `site.css` añade `env(safe-area-inset-*)` a la barra superior y al pie. En la web sin muesca valen 0.
+- `viewport-fit=cover`: la página llega bajo la barra de estado y la barra de gestos del teléfono. `site.css` añade `env(safe-area-inset-*)` a la barra superior, al pie y, en horizontal, a los lados del `body`. En la web sin muesca valen 0.
 - Archivos de la app:
   - `capacitor.config.ts`: `appId` (provisional, ver `PLAN.md`), nombre y `webDir`.
   - `android/`, `ios/`: proyectos nativos generados por Capacitor. Se versionan. La copia de `dist/` que llevan dentro (`android/app/src/main/assets/public`, `ios/App/App/public`) la ignora git: la crea `cap sync`.
   - `assets/*.svg`: fuente del icono y del splash. Los PNG de `android/…/res` e `ios/…/Assets.xcassets` salen de aquí con `npm run app:assets`; no los edites a mano.
   - Color de fondo del splash de Android 12+: `windowSplashScreenBackground` en `android/app/src/main/res/values/styles.xml`.
+  - Plugin `@capacitor/geolocation` (la distancia de "Hoy en el lago"). Permisos: `ACCESS_COARSE_LOCATION` en `AndroidManifest.xml` y los textos `NSLocation…UsageDescription` en `ios/App/App/Info.plist`. Tras añadir o quitar un plugin, `npm run app:build` (hace `cap sync`) y versiona los cambios de `android/` e `ios/`.
 - Para compilar Android hace falta el Android SDK (Android Studio); para iOS, macOS con Xcode.
 
 ## Cómo encaja todo
 
-- `src/content.config.ts` define la colección `pages`. Cada archivo Markdown tiene `key` (igual en todos los idiomas; vincula las traducciones), `title`, `description`, `order` (posición en el menú) y, opcionalmente, `photo`/`photoAlt` y `draft_translation`. El nombre del archivo es la URL: `es/relampago.md` → `/es/relampago/`.
+- `src/content.config.ts` define la colección `pages`. Cada archivo Markdown tiene `key` (igual en todos los idiomas; vincula las traducciones), `title`, `description`, `order` (posición en el menú) y, opcionalmente, `photo`/`photoAlt`, `draft_translation` y `menu: false` (la página no sale en el menú ni en la portada; así está la de privacidad, enlazada desde el pie). El nombre del archivo es la URL: `es/relampago.md` → `/es/relampago/`.
 - La colección `tours` (`src/content/tours.yaml`, una lista para los 4 idiomas) guarda los operadores de tours. `src/components/TourList.astro` la muestra al final de la página con `key: tours`. Mientras la lista está vacía, el build avisa de que la colección está vacía: es normal.
 - `src/pages/[lang]/[...slug].astro` renderiza todas las páginas Markdown. `src/pages/[lang]/index.astro` es la página de inicio. `src/pages/index.astro` (la raíz del sitio) redirige al idioma del visitante y, sin JavaScript, muestra un selector de idioma.
 - `src/i18n/ui.ts` contiene los textos de la interfaz (menú, botones, página de inicio) y la lista de idiomas (`LANGS`). Cada idioma se tipa contra `es`, así que una clave que falte es un error de tipos. Mantén todos los idiomas sincronizados.

@@ -19,15 +19,15 @@ const toFile = (url: string) => (app ? url.replace(/\/?$/, '/index.html') : url)
 export const homeUrl = (lang: Lang) => toFile(getRelativeLocaleUrl(lang));
 export const pageUrl = (page: Page) => toFile(getRelativeLocaleUrl(langOf(page), slugOf(page)));
 
-/* Las páginas de un idioma, en el orden del menú. */
+/* Las páginas del menú de un idioma, en orden. Las que tienen `menu: false` no salen. */
 export async function pagesIn(lang: Lang) {
-  const all = await getCollection('pages', (p) => langOf(p) === lang);
+  const all = await getCollection('pages', (p) => langOf(p) === lang && p.data.menu);
   return all.sort((a, b) => a.data.order - b.data.order);
 }
 
-/* La URL de una página en un idioma, buscada por su key. */
+/* La URL de una página en un idioma, buscada por su key (también las que no salen en el menú). */
 export async function urlOf(key: PageKey, lang: Lang) {
-  const page = (await pagesIn(lang)).find((p) => p.data.key === key);
+  const page = (await getCollection('pages', (p) => langOf(p) === lang)).find((p) => p.data.key === key);
   return page ? pageUrl(page) : homeUrl(lang);
 }
 

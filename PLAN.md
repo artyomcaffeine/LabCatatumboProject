@@ -29,13 +29,15 @@ Objetivo: el mismo build estático (`dist/`) empaquetado como app de Android e i
 - [x] **5. Enlaces externos**: Capacitor ya los abre en el navegador del sistema en Android y en iOS, así que no hace falta `@capacitor/browser`. Sin conexión, el navegador del sistema muestra su propio aviso.
 - [x] **6. Configuración**: `android` e `ios` excluidos en `tsconfig.json`.
 - [x] **7. Icono y splash**: fuentes en `assets/*.svg` (el dibujo de `public/icons/catatumbo.svg` sin el texto, que no se lee en un icono), generados con `@capacitor/assets` (`npm run app:assets`). Fondo `#142d31`, también para el splash del sistema en Android 12+.
-  - [x] Barra de estado: `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` en `site.css`. El hueco bajo la barra de estado toma el color de la barra superior, en modo claro y oscuro. **Falta:** mirarlo en un iPhone con muesca y en un Android reciente. La orientación horizontal (muesca a un lado) aún no tiene margen lateral.
+  - [x] Barra de estado: `viewport-fit=cover` y márgenes `env(safe-area-inset-*)` en `site.css`. El hueco bajo la barra de estado toma el color de la barra superior, en modo claro y oscuro. En horizontal, `body` se aparta `env(safe-area-inset-left/right)`: el contenido no queda bajo la muesca y los fondos de las franjas se detienen ahí, como en Safari sin `viewport-fit=cover` (probado simulando 47 px). **Falta:** mirarlo en un iPhone con muesca y en un Android reciente, en vertical y en horizontal.
 - [ ] **8. Preparación para las tiendas**:
   - Cuentas: Google Play Console (pago único) y Apple Developer Program (anual).
   - Android: keystore de firma fuera del repo, con copia de seguridad. Versión (`versionCode`/`versionName`) en `android/app/build.gradle`.
   - iOS: hace falta macOS con Xcode para compilar y subir.
   - Capturas de pantalla por idioma, textos de la ficha en es/en/de/fr (de y fr revisados por hablantes nativos antes de publicar).
-  - Política de privacidad: página Markdown nueva en los 4 idiomas (las dos tiendas la piden). Formularios de privacidad de Apple y "Seguridad de los datos" de Google.
+  - [x] Política de privacidad: página en los 4 idiomas (`es/privacidad.md`, `en/privacy.md`, `de/datenschutz.md`, `fr/confidentialite.md`; de y fr en borrador), enlazada desde el pie. No sale en el menú ni en la portada (`menu: false`). Dice lo que hay hoy: ningún dato personal, solo el idioma elegido guardado en el dispositivo, la app sin permisos ni servidor, la web en GitHub Pages. Su URL pública es la que se pone en las fichas de las tiendas.
+  - Falta en la política: un correo de contacto (ver decisiones pendientes). Si cambia el alojamiento de la web, cambiar el apartado "La web".
+  - Formularios de privacidad de Apple y "Seguridad de los datos" de Google: con la app de hoy, la respuesta es "no se recogen datos".
   - Ojo: Apple puede rechazar apps que solo envuelven una web (guía 4.2). El funcionamiento sin conexión ayuda; los widgets de la Fase 3 ayudarían más.
 - [x] **9. Documentado** en `CLAUDE.md` (notas técnicas de la app) y en `README.md` (comandos).
 - [x] **10. La web sigue igual**: `npm run check` sin errores; con `npm run build` los enlaces siguen siendo `/es/relampago/` y la barra superior mide lo mismo (70 px / 60 px). El APK de depuración de Android compila (`./gradlew assembleDebug`). iOS no se ha compilado (necesita macOS).
@@ -86,9 +88,22 @@ El cliente rellena un formulario y la solicitud le llega al operador. No es una 
 
 ---
 
-## Fase 3 · Widgets de tiempo, ubicación y rayos (fase futura)
+## Fase 3 · Widgets de tiempo, ubicación y rayos (en curso)
 
-Hoy `CLAUDE.md` deja clima y GPS fuera de alcance. Antes de empezar, actualizar el alcance en `CLAUDE.md`.
+- [x] **Alcance** actualizado en `CLAUDE.md` (2026-10-26): tiempo, ubicación y rayos entran; mapas, notificaciones, cuentas y base de datos siguen fuera.
+- [x] **Página "Hoy en el lago"** (`key: today`; `es/hoy.md`, `en/today.md`, `de/heute.md`, `fr/aujourdhui.md`), última del menú, con tarjeta en la portada (icono de luna). de y fr, en borrador. Los widgets están en `src/components/Today.astro`.
+- [x] **Tiempo y rayos de la semana**: esta noche y las 6 siguientes en Congo Mirador (tormenta, lluvia, viento, puesta de sol). Una sola llamada a Open-Meteo al abrir la página; el último pronóstico se guarda en `localStorage` (`ct.forecast`) y, sin conexión, se muestra con un aviso y su fecha. Atribución de Open-Meteo (CC BY 4.0) en el panel.
+  - "Tormenta" es una estimación, explicada en la página: *probable* si el modelo prevé tormenta (códigos 95–99) o CAPE ≥ 1500 J/kg con lluvia ≥ 50 %; *posible* con CAPE ≥ 500 J/kg y lluvia ≥ 30 %. Los modelos casi nunca dan el código de tormenta en el lago (2 horas en 16 días, en una prueba de octubre de 2026), por eso se usa también el CAPE.
+  - La política de privacidad ya dice que la página pide el pronóstico a Open-Meteo (recibe la IP; no la ubicación).
+  - En las pruebas, Open-Meteo devolvió "límite diario superado" desde la IP compartida del servidor de pruebas: la página mostró el aviso de sin conexión, como debe. El límite gratuito es por IP (10 000 llamadas/día); cada visita hace una.
+- [x] **Ubicación**: distancia en línea recta y dirección (N, NE…) hasta Puerto Concha, Congo Mirador y Ologá, calculadas en el teléfono, sin internet. Solo se pide al pulsar "Calcular distancia"; ni se guarda ni se envía.
+  - Dependencia nueva: `@capacitor/geolocation` (8.x). En la app pide el permiso de forma nativa (en iOS, sin el plugin, el WebView muestra además un aviso de "localhost"); en la web usa la ubicación del navegador. Añade unos 15 KB de JavaScript, solo en esta página.
+  - Permisos: Android solo `ACCESS_COARSE_LOCATION` (ubicación aproximada, ~2 km: basta para decenas de km). iOS: `NSLocationWhenInUseUsageDescription` y `NSLocationAlwaysAndWhenInUseUsageDescription` (el plugin exige las dos; el aviso "siempre" no se llega a mostrar), con el texto en inglés. **Falta:** traducir ese texto (`InfoPlist.strings`) si se quiere en el idioma del teléfono.
+  - El APK de depuración compila con el plugin (`./gradlew assembleDebug`, 2026-10-26). iOS sin compilar (necesita macOS).
+  - Política de privacidad y textos de la página actualizados. En los formularios de las tiendas: la ubicación aproximada se usa solo en el dispositivo, así que no cuenta como "dato recogido" (Google: "Seguridad de los datos"; Apple: etiqueta de privacidad).
+- [ ] **Rayos del mes y del año** (climatología): bloqueado. El dato bueno es LIS VHRMC de la NASA (0,1°, mensual, 1998–2013, archivo `lis_vhrmc_1998_2013_v01.nc.gz`), pero para descargarlo hace falta una cuenta gratuita de NASA Earthdata. Con el archivo, se resume en un JSON fijo del repo (funciona sin conexión). No inventar cifras: hasta entonces no se muestra.
+- [ ] Probar en teléfonos reales: permisos, sin conexión, modo avión.
+- [ ] El menú tiene ahora 6 páginas: en alemán, entre 650 y 900 px, los enlaces ocupan dos líneas. Cabe, pero va justo; mirarlo si se añade otra página.
 
 ### Principios para todos los widgets
 
@@ -101,7 +116,7 @@ Hoy `CLAUDE.md` deja clima y GPS fuera de alcance. Antes de empezar, actualizar 
 ### Tiempo
 
 - Fuente propuesta: [Open-Meteo](https://open-meteo.com/): gratis, sin clave, permite llamadas desde el navegador (CORS), licencia CC BY 4.0 (exige atribución). El plan gratuito es para uso no comercial: revisar si la app será de pago o tendrá anuncios.
-- Pronóstico de hasta 16 días para coordenadas fijas (Congo Mirador, Ologá, Puerto Concha: coordenadas por confirmar).
+- Pronóstico para un punto fijo: Congo Mirador. Coordenadas de referencia (OpenStreetMap, por confirmar sobre el terreno): Congo Mirador 9.3859, −71.8005; Ologá 9.4316, −71.8350; Puerto Concha 9.0336, −71.7502.
 - Datos útiles: probabilidad de lluvia y de tormenta (códigos 95–99), nubosidad, viento, hora de la puesta de sol.
 
 ### Ubicación
@@ -131,11 +146,12 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 
 - [ ] `appId` y nombre de la app en las tiendas. Ahora hay uno provisional, `com.catatumbodigital.guia`, con el nombre "Catatumbo" (en `capacitor.config.ts`, `android/app/build.gradle` e `ios/App/App.xcodeproj`). El `appId` no se puede cambiar después de publicar.
 - [ ] Quién tiene las cuentas de desarrollador y el Mac para compilar iOS.
+- [ ] Correo de contacto para la política de privacidad y las fichas de las tiendas (las dos tiendas lo piden).
 - [ ] Lista inicial de operadores de tours (por definir; candidatos en la Fase 2).
 - [ ] Alojamiento del servidor del formulario y servicio de correo (Fase 2, servidor propio).
 - [ ] ¿Los operadores pagan por aparecer o por las solicitudes? Si es así, hay que cambiar el aviso de la página de tours.
-- [ ] Qué significa "cantidad de rayos" en la app: probabilidad, promedio histórico o conteo real.
-- [ ] Coordenadas de referencia para el tiempo y la distancia.
+- [ ] Uso comercial: el plan gratuito de Open-Meteo es para uso no comercial. Si la app va a ser de pago o con anuncios, hace falta su plan de pago.
+- [ ] Una cuenta gratuita de NASA Earthdata para descargar la climatología de rayos (Fase 3).
 - [ ] Presupuesto para APIs o servidor (si se elige algo que no sea gratis).
 
 ## Registro de decisiones
@@ -151,4 +167,9 @@ Nadie puede saber cuántos rayos *caerán*. Hay tres tipos de dato, y hay que de
 | 2026-10-26 | Operadores por definir; `tours.yaml` sigue vacío. | Aún no hay operadores elegidos. |
 | 2026-10-26 | Se aprueban los criterios para incluir operadores (Fase 2). | Cubren seguridad, trato con las comunidades y vigencia de los datos. |
 | 2026-10-26 | Habrá un formulario de solicitud que el cliente rellena y se envía al operador. | El cliente contacta con el operador sin salir de la guía. Falta elegir cómo se envía. |
+| 2026-10-26 | Política de privacidad como página Markdown fuera del menú (`menu: false`), enlazada desde el pie. | Las tiendas piden una URL pública; así sirve también dentro de la app y sin conexión. |
+| 2026-10-26 | En horizontal, todo el `body` se aparta de la muesca. | Una sola regla CSS en vez de tocar cada franja; es lo mismo que hace Safari por defecto. |
+| 2026-10-26 | Fase 3 empieza: "cantidad de rayos" = estimación de tormenta para la semana + climatología para mes/año. Sin conteo real. | Es la recomendación del plan: sin servidor y con datos que funcionan sin conexión. El conteo real pediría un trabajo programado y mantenimiento. Se puede revisar. |
+| 2026-10-26 | Coordenadas de referencia tomadas de OpenStreetMap. | No había otras; se confirman sobre el terreno. |
+| 2026-10-26 | El pronóstico es para un solo punto (Congo Mirador). | Una sola llamada por visita; los tres lugares están a menos de 45 km y el modelo no los distingue bien. |
 | 2026-10-26 | El formulario se envía con un servidor propio (opción C). | Máximo control sobre el envío y los datos. Implica un servidor pequeño aparte del sitio estático, con su coste y mantenimiento. |

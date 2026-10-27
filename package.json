@@ -19,6 +19,7 @@
   "dependencies": {
     "@capacitor/android": "^8.5.3",
     "@capacitor/core": "^8.5.3",
+    "@capacitor/geolocation": "^8.2.4",
     "@capacitor/ios": "^8.5.3",
     "astro": "^7.4.0"
   },
