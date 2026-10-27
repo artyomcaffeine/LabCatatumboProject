@@ -114,9 +114,9 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .today .storm-high .display-figure, .nights .storm-high { color: var(--rust); }
 .today .storm-low .display-figure { color: var(--text-muted); }
 .today-offline { margin: 0 0 16px; }
-/* El mapa: MapLibre dentro del .ct-map del sistema de diseño, con su barra de controles y su leyenda. Los marcadores usan
-   las clases SVG del sistema (ct-map-dot, ct-map-user); los controles de MapLibre toman los colores y fuentes del sitio. */
-.today-map-canvas { height: clamp(320px, 38vw, 460px); font: inherit; }
+/* El mapa: MapLibre, con el estilo Liberty de OpenFreeMap y sus controles por defecto, dentro del .ct-map del sistema
+   de diseño, con su barra de controles y su leyenda. Los marcadores usan las clases SVG del sistema (ct-map-dot, ct-map-user). */
+.today-map-canvas { height: clamp(320px, 38vw, 460px); }
 .today-map-canvas > p { margin: 0; padding: 20px; color: var(--text-muted); }
 .today-map .ct-legend { grid-template-columns: 1fr; gap: 14px; margin-top: 22px; }
 .today-map .ct-legend ol { grid-template-columns: 1fr; }
@@ -134,10 +134,6 @@ body { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-are
 .today-map .ct-map .map-user svg { width: 34px; height: 34px; min-height: 0; overflow: visible; }
 .map-pin-label { font: 10px var(--font-mono); letter-spacing: .04em; color: var(--map-label); white-space: nowrap;
   text-shadow: 0 0 2px var(--map-land), 0 0 2px var(--map-land), 0 0 3px var(--map-land); }
-.today-map .maplibregl-ctrl-group { background: var(--surface); border: var(--border-hairline) solid var(--rule); box-shadow: none; }
-.today-map .maplibregl-ctrl-attrib { font: 9px/1.5 var(--font-mono); background: color-mix(in srgb, var(--map-controls) 88%, transparent); color: var(--map-controls-text); }
-.today-map .maplibregl-ctrl-attrib a { color: var(--map-controls-text); }
-.today-map .maplibregl-cooperative-gesture-screen { font: 14px var(--font-sans); background: color-mix(in srgb, var(--deep) 70%, transparent); }
 .nights-title { margin: 56px 0 16px; color: var(--text); }
 .nights-title:has(+ .nights:empty) { display: none; }
 .nights { list-style: none; margin: 0; padding: 0; border-top: var(--border-hairline) solid var(--rule); }
