@@ -1,6 +1,6 @@
 ---
 key: today
-title: Hoy en el lago
+title: Tiempo y localización
 description: El pronóstico de esta noche y de la próxima semana en el Catatumbo, y un mapa con los lugares y tu posición.
 order: 6
 ---

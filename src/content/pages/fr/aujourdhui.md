@@ -1,6 +1,6 @@
 ---
 key: today
-title: Aujourd’hui sur le lac
+title: Météo et localisation
 description: Les prévisions pour cette nuit et la semaine à venir au Catatumbo, et une carte avec les lieux et votre position.
 order: 6
 draft_translation: true

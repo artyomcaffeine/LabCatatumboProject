@@ -1,5 +1,5 @@
 ---
-/* "Hoy en el lago" (página con key 'today'), dos widgets:
+/* "Tiempo y localización" (página con key 'today'), dos widgets:
    - El pronóstico de esta noche y de las 6 siguientes en Congo Mirador. Lo pide el navegador a Open-Meteo al abrir la página
      y guarda el último en localStorage (ct.forecast): sin conexión se ve ese, con su fecha.
    - Un mapa (MapLibre GL, código abierto) con los lugares de la excursión y, si lo pides, tu posición precisa y la
@@ -55,8 +55,10 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
         <ol>
           {PLACES.map((p, i) => (
             <li data-lat={p.lat} data-lon={p.lon} data-name={p.name}>
-              <span>{String(i + 1).padStart(2, '0')}</span>
-              <p><strong>{p.name}</strong> {t(p.role)}<small data-away></small></p>
+              <button type="button">
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <p><strong>{p.name}</strong> {t(p.role)}<small data-away></small></p>
+              </button>
             </li>
           ))}
         </ol>
@@ -292,6 +294,18 @@ const PLACES: { name: string; role: UIKey; lat: number; lon: number }[] = [
           say(note.dataset.last ?? privacy);
         }
       });
+
+      /* La leyenda: cada lugar centra el mapa en él y, si el mapa no se ve entero (en el teléfono la leyenda va
+         debajo), lo trae a la pantalla. */
+      for (const p of places) {
+        p.li.querySelector('button')!.addEventListener('click', (e) => {
+          places.forEach((q) => q.li.querySelector('button')!.removeAttribute('aria-current'));
+          (e.currentTarget as HTMLElement).setAttribute('aria-current', 'true');
+          map.flyTo({ center: [p.lon, p.lat], zoom: 12 });
+          const box = canvas.getBoundingClientRect();
+          if (box.top < 0 || box.bottom > innerHeight) canvas.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        });
+      }
 
       for (const p of places) {
         const pin = document.createElement('div');

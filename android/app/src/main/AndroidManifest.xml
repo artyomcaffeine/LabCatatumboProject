@@ -32,7 +32,7 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Ubicación para el mapa de "Hoy en el lago". Android exige pedir la aproximada junto a la precisa;
+    <!-- Ubicación para el mapa de "Tiempo y localización". Android exige pedir la aproximada junto a la precisa;
          el usuario puede elegir dar solo la aproximada. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
